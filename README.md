@@ -13,9 +13,9 @@ API'et ska ha följande endpoints:
 #### Kurser
 
 Lista kurser
--Hämta kurs på kursid
--Hämta kurs på kursnummer
--Hämta kurs på kurstitel
+- Hämta kurs på kursid
+* Hämta kurs på kursnummer
++ Hämta kurs på kurstitel
 -Hämta kurs på startdatum
 -Lägga till en ny kurs
 -Uppdatera en ny kurs
@@ -24,9 +24,9 @@ Lista kurser
 
 #### Lärare
 
--Lista lärare
--Hämta lärare på id
--Hämta lärare på e-postadress
+- Lista lärare
+- Hämta lärare på id
+- Hämta lärare på e-postadress
 -Lägga till en ny lärare
 -Uppdatera en lärare
 -Lista vilka kurser som en lärare undervisar
