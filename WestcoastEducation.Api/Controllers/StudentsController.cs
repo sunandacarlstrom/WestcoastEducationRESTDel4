@@ -44,15 +44,15 @@ namespace WestcoastEducationRESTDel1.api.Controllers
             return NoContent();
         }
 
-        [HttpPatch("markasapproved/{id}")]
-        public ActionResult MarkAsApproved(int id)
+        [HttpGet("list-approved-courses/{id}")]
+        public ActionResult ListApprovedCourses(int id)
         {
             // Gå till databasen och lista kurser som en student är anmäld på...
-            return NoContent();
+            return Ok(new { message = $"Lista kurser som en student är anmäld på fungerar {id}" });
         }
 
-        [HttpPatch("markasdone/{id}")]
-        public ActionResult MarkAsDone(int id)
+        [HttpPatch("add-course-to-student/{id}")]
+        public ActionResult AddCourseToStudent(int id)
         {
             // Gå till databasen och anmäl en student till nya kurser...
             return NoContent();

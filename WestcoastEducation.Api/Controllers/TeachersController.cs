@@ -28,7 +28,7 @@ namespace WestcoastEducationRESTDel1.api.Controllers
         public ActionResult AddTeacher()
         {
             // Gå till databasen och lägg till en ny lärare...
-            return Created(nameof(GetById), new { message = "AddCourse fungerar" });
+            return Created(nameof(GetById), new { message = "AddTeacher fungerar" });
         }
 
         [HttpPut("{id}")]
@@ -42,11 +42,11 @@ namespace WestcoastEducationRESTDel1.api.Controllers
         public ActionResult ListAssignedCourses(int id)
         {
             // Gå till databasen och lista vilka kurser som en lärare undervisar...
-            return NoContent();
+            return Ok(new { message = $"Lista vilka kurser som en lärare undervisar fungerar {id}" });
         }
 
-        [HttpPost("addcourse/{id}")]
-        public ActionResult AddCourse(int id)
+        [HttpPatch("add-course-to-teacher/{id}")]
+        public ActionResult AddCourseToTeacher(int id)
         {
             // Gå till databasen och lägg till kurs som lärare kan undervisa i...
             return NoContent();
