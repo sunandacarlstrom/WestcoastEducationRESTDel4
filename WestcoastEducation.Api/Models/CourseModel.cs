@@ -14,8 +14,5 @@ namespace WestcoastEducation.Api.Models
         public DateTime End { get; set; }
         public TimeSpan Length { get => End - Start; }
         public CourseTypeEnum Type { get; set; }
-
-        public ICollection<StudentModel>? Students { get; set; }
-        public ICollection<TeacherModel>? Teachers { get; set; }
     }
 }
