@@ -3,8 +3,8 @@ using Microsoft.AspNetCore.Mvc;
 namespace WestcoastEducationRESTDel1.api.Controllers
 {
     [ApiController]
-    [Route("api/v1/classrooms")]
-    public class ClassroomsController : ControllerBase
+    [Route("api/v1/courses")]
+    public class CoursesController : ControllerBase
     {
         [HttpGet()]
         public ActionResult List()
