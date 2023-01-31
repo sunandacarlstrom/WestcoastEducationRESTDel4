@@ -1,4 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using WestcoastEducation.Api.Data;
 
 namespace WestcoastEducationRESTDel1.api.Controllers
 {
@@ -6,16 +8,25 @@ namespace WestcoastEducationRESTDel1.api.Controllers
     [Route("api/v1/courses")]
     public class CoursesController : ControllerBase
     {
-        [HttpGet()]
-        public ActionResult List()
+        //kontakt med databasen 
+        private readonly WestcoastEducationContext _context;
+        public CoursesController(WestcoastEducationContext context)
         {
-            return Ok(new { message = "Lista kurser fungerar" });
+            _context = context;
+        }
+
+        [HttpGet()]
+        public async Task<ActionResult> List()
+        {
+            var result = await _context.Courses.ToListAsync();
+            return Ok(result);
         }
 
         [HttpGet("{id}")]
-        public ActionResult GetById(int id)
+        public async Task<ActionResult> GetById(int id)
         {
-            return Ok(new { message = $"GetById fungerar {id}" });
+            var result = await _context.Courses.FindAsync(id);
+            return Ok(result);
         }
 
         [HttpGet("courseno/{courseNo}")]

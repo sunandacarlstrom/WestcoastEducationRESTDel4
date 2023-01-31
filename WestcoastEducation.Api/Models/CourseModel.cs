@@ -6,6 +6,7 @@ namespace WestcoastEducation.Api.Models
     {
         [Key]
         public int Id { get; set; }
+        public int TeacherId { get; set; }
         public string? Number { get; set; }
         public string? Name { get; set; }
         public string? Title { get; set; }

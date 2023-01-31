@@ -18,6 +18,25 @@ builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
 
+// Seed the database 
+using var scope = app.Services.CreateScope();
+var services = scope.ServiceProvider;
+
+try
+{
+    var context = services.GetRequiredService<WestcoastEducationContext>();
+    await context.Database.MigrateAsync();
+
+    await SeedData.LoadCourseData(context);
+    await SeedData.LoadStudentData(context);
+    await SeedData.LoadTeacherData(context);
+}
+catch (Exception ex)
+{
+    Console.WriteLine("{0}", ex.Message);
+    throw;
+}
+
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {

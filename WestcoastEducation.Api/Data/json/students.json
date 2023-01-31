@@ -1,0 +1,26 @@
+[
+    {
+        "id": 1,
+        "email": "sunanda@ju.com"
+    },
+    {
+        "id": 2,
+        "email": "martin@ju.com"
+    },
+    {
+        "id": 3,
+        "email": "paulina@ju.com"
+    },
+    {
+        "id": 4,
+        "email": "adam@hej.com"
+    },
+    {
+        "id": 5,
+        "email": "emma@då.com"
+    },
+    {
+        "id": 6,
+        "email": "clara@svejs.com"
+    }
+]
