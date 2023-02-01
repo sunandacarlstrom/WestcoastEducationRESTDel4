@@ -1,4 +1,5 @@
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace WestcoastEducation.Api.Models
 {
@@ -13,7 +14,13 @@ namespace WestcoastEducation.Api.Models
         public string? Content { get; set; }
         public DateTime Start { get; set; }
         public DateTime End { get; set; }
-        public TimeSpan Length { get => End - Start; }
         public CourseTypeEnum Type { get; set; }
+
+        // The One-Side
+        [ForeignKey("TeacherId")]
+        public TeacherModel Teacher { get; set; } = new TeacherModel();
+
+        //The Many-Side
+        public ICollection<StudentModel>? Students { get; set; }
     }
 }

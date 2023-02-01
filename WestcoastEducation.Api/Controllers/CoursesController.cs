@@ -8,7 +8,6 @@ namespace WestcoastEducationRESTDel1.api.Controllers
     [Route("api/v1/courses")]
     public class CoursesController : ControllerBase
     {
-        //kontakt med databasen 
         private readonly WestcoastEducationContext _context;
         public CoursesController(WestcoastEducationContext context)
         {
