@@ -11,7 +11,7 @@ using WestcoastEducation.Api.Data;
 namespace WestcoastEducationRESTDel2.api.Data.Migrations
 {
     [DbContext(typeof(WestcoastEducationContext))]
-    [Migration("20230201180104_InitialCreate")]
+    [Migration("20230201181555_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -106,7 +106,7 @@ namespace WestcoastEducationRESTDel2.api.Data.Migrations
 
                     b.HasIndex("TeacherModelId");
 
-                    b.ToTable("TeacherSkillsModel");
+                    b.ToTable("Skills");
                 });
 
             modelBuilder.Entity("WestcoastEducation.Api.Models.CourseModel", b =>

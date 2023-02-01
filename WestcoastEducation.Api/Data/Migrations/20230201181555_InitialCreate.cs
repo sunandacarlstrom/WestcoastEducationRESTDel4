@@ -51,7 +51,7 @@ namespace WestcoastEducationRESTDel2.api.Data.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "TeacherSkillsModel",
+                name: "Skills",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "INTEGER", nullable: false)
@@ -61,9 +61,9 @@ namespace WestcoastEducationRESTDel2.api.Data.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_TeacherSkillsModel", x => x.Id);
+                    table.PrimaryKey("PK_Skills", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_TeacherSkillsModel_Teachers_TeacherModelId",
+                        name: "FK_Skills_Teachers_TeacherModelId",
                         column: x => x.TeacherModelId,
                         principalTable: "Teachers",
                         principalColumn: "Id");
@@ -95,24 +95,24 @@ namespace WestcoastEducationRESTDel2.api.Data.Migrations
                 column: "TeacherId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Skills_TeacherModelId",
+                table: "Skills",
+                column: "TeacherModelId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Students_CourseId",
                 table: "Students",
                 column: "CourseId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_TeacherSkillsModel_TeacherModelId",
-                table: "TeacherSkillsModel",
-                column: "TeacherModelId");
         }
 
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "Students");
+                name: "Skills");
 
             migrationBuilder.DropTable(
-                name: "TeacherSkillsModel");
+                name: "Students");
 
             migrationBuilder.DropTable(
                 name: "Courses");

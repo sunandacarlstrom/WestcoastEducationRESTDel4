@@ -103,7 +103,7 @@ namespace WestcoastEducationRESTDel2.api.Data.Migrations
 
                     b.HasIndex("TeacherModelId");
 
-                    b.ToTable("TeacherSkillsModel");
+                    b.ToTable("Skills");
                 });
 
             modelBuilder.Entity("WestcoastEducation.Api.Models.CourseModel", b =>
