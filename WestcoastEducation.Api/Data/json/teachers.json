@@ -1,26 +1,32 @@
 [
     {
         "id": 1,
+        "name": "Maria Wyman",
         "email": "maria@ju.com"
     },
     {
         "id": 2,
+        "name": "Anders Cummings",
         "email": "anders@ju.com"
     },
     {
         "id": 3,
+        "name": "Michael Bode",
         "email": "michael@ju.com"
     },
     {
         "id": 4,
+        "name": "Kira Osinski",
         "email": "hej@hej.com"
     },
     {
         "id": 5,
+        "name": "Darin Rogahn",
         "email": "hej@då.com"
     },
     {
         "id": 6,
+        "name": "Cordell Nitzsche",
         "email": "hej@svejs.com"
     }
 ]

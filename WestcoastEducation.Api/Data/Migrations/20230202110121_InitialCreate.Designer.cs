@@ -11,7 +11,7 @@ using WestcoastEducation.Api.Data;
 namespace WestcoastEducationRESTDel2.api.Data.Migrations
 {
     [DbContext(typeof(WestcoastEducationContext))]
-    [Migration("20230202103410_InitialCreate")]
+    [Migration("20230202110121_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
