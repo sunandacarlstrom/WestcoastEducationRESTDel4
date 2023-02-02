@@ -11,7 +11,7 @@ using WestcoastEducation.Api.Data;
 namespace WestcoastEducationRESTDel2.api.Data.Migrations
 {
     [DbContext(typeof(WestcoastEducationContext))]
-    [Migration("20230201181555_InitialCreate")]
+    [Migration("20230202103410_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -69,6 +69,9 @@ namespace WestcoastEducationRESTDel2.api.Data.Migrations
                     b.Property<string>("Email")
                         .HasColumnType("TEXT");
 
+                    b.Property<string>("Name")
+                        .HasColumnType("TEXT");
+
                     b.HasKey("Id");
 
                     b.HasIndex("CourseId");
@@ -83,6 +86,9 @@ namespace WestcoastEducationRESTDel2.api.Data.Migrations
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("Email")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Name")
                         .HasColumnType("TEXT");
 
                     b.HasKey("Id");

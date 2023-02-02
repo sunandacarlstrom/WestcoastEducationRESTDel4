@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using WestcoastEducation.Api.Data;
+using WestcoastEducation.Api.ViewModels;
 
 namespace WestcoastEducationRESTDel1.api.Controllers
 {
@@ -17,7 +18,23 @@ namespace WestcoastEducationRESTDel1.api.Controllers
         [HttpGet()]
         public async Task<ActionResult> List()
         {
-            var result = await _context.Courses.ToListAsync();
+            var result = await _context.Courses
+            // talar om för EF Core att när du listar Courses vill jag också att du inkluderar det som finns i Teacher-tabellen där jag har en INNER JOIN masking, 
+            // alltså teacherId med ett visst värde i Courses måste existera i Teacher som id-kolumn.
+            .Include(t => t.Teacher)
+            // projicerar resultatet in i min ViewListModel 
+            .Select(c => new CourseListViewModel
+            {
+                //Här definierar jag vilka kolumner som jag egentligen vill ha tillbaka i (SQL)frågan 
+                Id = c.Id,
+                // använder en coalesce operation
+                Teacher = c.Teacher.Name ?? "",
+                Number = c.Number,
+                Name = c.Name,
+                Title = c.Title, 
+                Content = c.Content
+            })
+            .ToListAsync();
             return Ok(result);
         }
 

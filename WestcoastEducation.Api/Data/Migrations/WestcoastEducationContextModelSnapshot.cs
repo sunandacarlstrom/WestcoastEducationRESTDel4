@@ -66,6 +66,9 @@ namespace WestcoastEducationRESTDel2.api.Data.Migrations
                     b.Property<string>("Email")
                         .HasColumnType("TEXT");
 
+                    b.Property<string>("Name")
+                        .HasColumnType("TEXT");
+
                     b.HasKey("Id");
 
                     b.HasIndex("CourseId");
@@ -80,6 +83,9 @@ namespace WestcoastEducationRESTDel2.api.Data.Migrations
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("Email")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Name")
                         .HasColumnType("TEXT");
 
                     b.HasKey("Id");
