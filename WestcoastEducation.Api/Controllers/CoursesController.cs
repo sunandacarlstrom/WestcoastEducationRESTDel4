@@ -31,8 +31,7 @@ namespace WestcoastEducationRESTDel1.api.Controllers
                 Teacher = c.Teacher.Name ?? "",
                 Number = c.Number,
                 Name = c.Name,
-                Title = c.Title, 
-                Content = c.Content
+                Title = c.Title
             })
             .ToListAsync();
             return Ok(result);
@@ -41,26 +40,109 @@ namespace WestcoastEducationRESTDel1.api.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult> GetById(int id)
         {
-            var result = await _context.Courses.FindAsync(id);
+            var result = await _context.Courses
+            .Include(t => t.Teacher)
+            // måste ha en vymodell (DTO) som vi kan flytta över data ifrån den här frågan till en modell som json kan retunera 
+            // projicerar resultatet 
+            .Select(c => new CourseDetailsViewModel
+            {
+                //Här definierar jag vilka kolumner som jag egentligen vill ha tillbaka i (SQL)frågan 
+                Id = c.Id,
+                // använder en coalesce operation
+                Teacher = c.Teacher.Name ?? "",
+                Number = c.Number,
+                Name = c.Name,
+                Title = c.Title,
+                Start = c.Start,
+                End = c.End,
+                Content = c.Content
+            })
+            // jag vill ha tag i ett Id som stämmer överrens med det Id som jag skickar in 
+            .SingleOrDefaultAsync(c => c.Id == id);
             return Ok(result);
         }
 
         [HttpGet("courseno/{courseNo}")]
-        public ActionResult GetByCourseNumber(string courseNo)
+        public async Task<ActionResult> GetByCourseNumber(string courseNo)
         {
-            return Ok(new { message = $"GetByCourseNumber fungerar {courseNo}" });
+            var result = await _context.Courses
+            .Include(t => t.Teacher)
+            .Select(c => new CourseDetailsViewModel
+            {
+                Id = c.Id,
+                Teacher = c.Teacher.Name ?? "",
+                Number = c.Number,
+                Name = c.Name,
+                Title = c.Title,
+                Start = c.Start,
+                End = c.End,
+                Content = c.Content
+            })
+            .SingleOrDefaultAsync(c => c.Number!.ToUpper().Trim() == courseNo.ToUpper().Trim());
+            return Ok(result);
         }
 
         [HttpGet("coursetitle/{courseTitle}")]
-        public ActionResult GetByCourseTitle(string courseTitle)
+        public async Task<ActionResult> GetByCourseTitle(string courseTitle)
         {
-            return Ok(new { message = $"GetByCourseTitle fungerar {courseTitle}" });
+            var result = await _context.Courses
+            .Include(t => t.Teacher)
+            .Where(s => s.Title!.ToUpper().Trim() == courseTitle.ToUpper().Trim())
+            .Select(c => new CourseDetailsViewModel
+            {
+                Id = c.Id,
+                Teacher = c.Teacher.Name ?? "",
+                Number = c.Number,
+                Name = c.Name,
+                Title = c.Title,
+                Start = c.Start,
+                End = c.End,
+                Content = c.Content
+            })
+            // listar alla kurser som WU22 programmets elever har under sin studietid
+            .ToListAsync();
+            return Ok(result);
+        }
+
+        [HttpGet("teacher/{teacher}")]
+        public async Task<ActionResult> GetByTeacher(string teacher)
+        {
+            var result = await _context.Courses
+            .Include(t => t.Teacher)
+            // sätter ett villkor där jag beskriver läraren som håller i x kurser
+            .Where(s => s.Teacher.Name!.ToUpper().Trim() == teacher.ToUpper().Trim())
+            .Select(c => new CourseDetailsViewModel
+            {
+                Id = c.Id,
+                Teacher = c.Teacher.Name ?? "",
+                Number = c.Number,
+                Name = c.Name,
+                Title = c.Title,
+                Start = c.Start,
+                End = c.End,
+                Content = c.Content
+            })
+            // listar alla kurser som en specifik lärare håller i 
+            .ToListAsync();
+            return Ok(result);
         }
 
         [HttpGet("coursestart/{courseStart}")]
-        public ActionResult GetByCourseStart(string courseStart)
+        public async Task<ActionResult> GetByCourseStart(string courseStart)
         {
-            return Ok(new { message = $"GetByCourseStart fungerar {courseStart}" });
+            var result = await _context.Courses
+            .Include(t => t.Teacher)
+            .Select(c => new CourseListViewModel
+            {
+                Id = c.Id,
+                Teacher = c.Teacher.Name ?? "",
+                Number = c.Number,
+                Name = c.Name,
+                Title = c.Title
+            })
+            // listar alla kurser som startar samtidigt
+            .ToListAsync();
+            return Ok(result);
         }
 
         [HttpPost()]
