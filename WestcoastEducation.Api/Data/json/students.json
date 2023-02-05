@@ -1,31 +1,37 @@
 [
     {
         "id": 1,
+        "courseId": 1,
         "name": "Sunanda Carlström",
         "email": "sunanda@ju.com"
     },
     {
         "id": 2,
+        "courseId": 2,
         "name": "Martin Schowalter",
         "email": "martin@ju.com"
     },
     {
         "id": 3,
+        "courseId": 3,
         "name": "Paulina Ziemann",
         "email": "paulina@ju.com"
     },
     {
         "id": 4,
+        "courseId": 4,
         "name": "Adam Donnelly",
         "email": "adam@hej.com"
     },
     {
         "id": 5,
+        "courseId": 2,
         "name": "Emma Crist",
         "email": "emma@då.com"
     },
     {
         "id": 6,
+        "courseId": 3,
         "name": "Clara Wuckert",
         "email": "clara@svejs.com"
     }

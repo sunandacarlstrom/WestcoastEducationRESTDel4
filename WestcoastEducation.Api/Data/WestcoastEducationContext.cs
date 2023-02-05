@@ -8,7 +8,7 @@ public class WestcoastEducationContext : DbContext
     public DbSet<CourseModel> Courses => Set<CourseModel>();
     public DbSet<StudentModel> Students => Set<StudentModel>();
     public DbSet<TeacherModel> Teachers => Set<TeacherModel>();
-    public DbSet<TeacherSkillsModel> Skills => Set<TeacherSkillsModel>();
+    public DbSet<TeacherSkillsModel> TeacherSkills => Set<TeacherSkillsModel>();
 
     public WestcoastEducationContext(DbContextOptions options) : base(options)
     {

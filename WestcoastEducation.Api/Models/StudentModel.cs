@@ -13,5 +13,5 @@ public class StudentModel
 
     // The One-Side
     [ForeignKey("CourseId")]
-    public CourseModel Course { get; set; } = new CourseModel();
+    public CourseModel? Course { get; set; }
 }

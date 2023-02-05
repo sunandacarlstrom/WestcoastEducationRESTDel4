@@ -18,7 +18,7 @@ namespace WestcoastEducation.Api.Models
 
         // The One-Side
         [ForeignKey("TeacherId")]
-        public TeacherModel Teacher { get; set; } = new TeacherModel();
+        public TeacherModel? Teacher { get; set; }
 
         //The Many-Side
         public ICollection<StudentModel>? Students { get; set; }

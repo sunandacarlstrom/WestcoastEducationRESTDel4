@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using WestcoastEducation.Api.Data;
+using WestcoastEducation.Api.Models;
 using WestcoastEducation.Api.ViewModels;
 
 namespace WestcoastEducationRESTDel1.api.Controllers
@@ -146,10 +147,45 @@ namespace WestcoastEducationRESTDel1.api.Controllers
         }
 
         [HttpPost()]
-        public ActionResult AddCourse()
+        public async Task<ActionResult> AddCourse(CourseAddViewModel model)
         {
-            // Gå till databasen och lägg till en ny kurs...
-            return Created(nameof(GetById), new { message = "AddCourse fungerar" });
+            // kontrollerar att jag har fått in allting korrekt... 
+            // BadRequest ger statuskoden 400
+            if (!ModelState.IsValid) return BadRequest("Information saknas för att kunna lagra bilen i systemet");
+
+            // kontrollerar att kursen inte redan finns i systemet...
+            var exists = await _context.Courses.SingleOrDefaultAsync(c => c.Number!.ToUpper().Trim() == model.Number!.ToUpper().Trim());
+
+            // om exits inte är null då skickas en BadRequest ....
+            if (exists is not null) return BadRequest($"Vi har redan registrerat en kurs med kursnummer {model.Number}");
+
+            // kontrollera att lärare finns i systemet... 
+            var teacher = await _context.Teachers.SingleOrDefaultAsync(c => c.Name!.ToUpper().Trim() == model.Teacher.ToUpper().Trim());
+
+            // om läraren inte finns ...
+            if (teacher is null) return NotFound($"Vi kunde inte hitta någon lärare med namnet {model.Teacher} i vårt system");
+
+            // skapar CourseModel som ska skickas till databasen 
+            var course = new CourseModel
+            {
+                Number = model.Number,
+                Teacher = teacher,
+                Name = model.Name,
+                Title = model.Title,
+                Content = model.Content,
+                Start = model.Start,
+                End = model.End
+            };
+
+            await _context.Courses.AddAsync(course);
+
+            if (await _context.SaveChangesAsync() > 0)
+            {
+                return Created(nameof(GetById), new { id = course.Id });
+            }
+
+            // när jag gör SaveChangesAsync i ett if-uttryck så måste jag här retunera ett felmeddelande som säger "Ett oväntat fel har uppstått"
+            return StatusCode(500, "Internal Server Error");
         }
 
         [HttpPut("{id}")]

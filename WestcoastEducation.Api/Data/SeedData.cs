@@ -59,4 +59,22 @@ public static class SeedData
             await context.SaveChangesAsync();
         }
     }
+    public static async Task LoadTeacherSkillsData(WestcoastEducationContext context)
+    {
+        var options = new JsonSerializerOptions
+        {
+            PropertyNameCaseInsensitive = true
+        };
+
+        if (context.TeacherSkills.Any()) return;
+
+        var json = System.IO.File.ReadAllText("Data/json/teacherSkills.json");
+        var skills = JsonSerializer.Deserialize<List<TeacherSkillsModel>>(json, options);
+
+        if (skills is not null && skills.Count > 0)
+        {
+            await context.TeacherSkills.AddRangeAsync(skills);
+            await context.SaveChangesAsync();
+        }
+    }
 }

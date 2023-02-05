@@ -1,0 +1,22 @@
+[
+    {
+        "id": 1,
+        "teacherId": 1,
+        "skill": "HTML"
+    },
+    {
+        "id": 2,
+        "teacherId": 1,
+        "skill": "CSS"
+    },
+    {
+        "id": 3,
+        "teacherId": 2,
+        "skill": "JavaScript"
+    },
+    {
+        "id": 4,
+        "teacherId": 6,
+        "skill": "Python"
+    }
+]
