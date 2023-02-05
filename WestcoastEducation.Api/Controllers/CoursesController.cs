@@ -158,15 +158,15 @@ namespace WestcoastEducationRESTDel1.api.Controllers
         {
             // kontrollerar att jag har fått in allting korrekt... 
             // BadRequest ger statuskoden 400
-            if (!ModelState.IsValid) return BadRequest("Information saknas för att kunna lagra bilen i systemet");
+            if (!ModelState.IsValid) return BadRequest("Information saknas för att kunna lagra kursen i systemet");
 
             // kontrollerar att kursen inte redan finns i systemet...
             var exists = await _context.Courses.SingleOrDefaultAsync(c => c.Number!.ToUpper().Trim() == model.Number!.ToUpper().Trim());
 
-            // om exits inte är null då skickas en BadRequest ....
+            // om exits inte är null då skickas en BadRequest...
             if (exists is not null) return BadRequest($"Vi har redan registrerat en kurs med kursnummer {model.Number}");
 
-            // kontrollera att lärare finns i systemet... 
+            // kontrollera att läraren finns i systemet... 
             var teacher = await _context.Teachers.SingleOrDefaultAsync(c => c.Name!.ToUpper().Trim() == model.Teacher.ToUpper().Trim());
 
             // om läraren inte finns ...
@@ -179,9 +179,7 @@ namespace WestcoastEducationRESTDel1.api.Controllers
                 Teacher = teacher,
                 Name = model.Name,
                 Title = model.Title,
-                Content = model.Content,
-                Start = model.Start,
-                End = model.End
+                Content = model.Content
             };
 
             await _context.Courses.AddAsync(course);
