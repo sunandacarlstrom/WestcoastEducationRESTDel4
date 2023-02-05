@@ -128,18 +128,25 @@ namespace WestcoastEducationRESTDel1.api.Controllers
             return Ok(result);
         }
 
-        [HttpGet("coursestart/{courseStart}")]
-        public async Task<ActionResult> GetByCourseStart(string courseStart)
+        [HttpGet("coursestart/{year}/{month}/{day}")]
+        public async Task<ActionResult> GetByCourseStart(int year, int month, int day)
         {
+            // skapar en DateTime-variabel för att kunna använda ".CompareTo" nedanför
+            DateTime search = new DateTime(year, month, day);
+
             var result = await _context.Courses
             .Include(t => t.Teacher)
-            .Select(c => new CourseListViewModel
+            .Where(s => s.Start.CompareTo(search) == 0)
+            .Select(c => new CourseDetailsViewModel
             {
                 Id = c.Id,
                 Teacher = c.Teacher.Name ?? "",
                 Number = c.Number,
                 Name = c.Name,
-                Title = c.Title
+                Title = c.Title,
+                Start = c.Start,
+                End = c.End,
+                Content = c.Content
             })
             // listar alla kurser som startar samtidigt
             .ToListAsync();
