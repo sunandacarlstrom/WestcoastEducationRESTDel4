@@ -236,7 +236,7 @@ namespace WestcoastEducationRESTDel1.api.Controllers
         }
 
         [HttpPatch("markasfull/{id}")]
-        public ActionResult MarkAsFull(int id)
+        public async Task<ActionResult> MarkAsFull(int id)
         {
             // Gå till databasen och markera en kurs som fullbokad...
             return NoContent();
