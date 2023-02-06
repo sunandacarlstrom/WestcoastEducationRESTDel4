@@ -2,7 +2,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace WestcoastEducation.Api.ViewModels;
 
-public class CourseAddViewModel
+public class CourseUpdateViewModel
 {
     [Required(ErrorMessage = "Lärare för kursen saknas")]
     public string Teacher { get; set; } = "";

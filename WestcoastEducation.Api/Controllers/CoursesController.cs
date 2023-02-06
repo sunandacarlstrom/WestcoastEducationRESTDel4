@@ -194,10 +194,45 @@ namespace WestcoastEducationRESTDel1.api.Controllers
         }
 
         [HttpPut("{id}")]
-        public ActionResult UpdateCourse(int id)
+        public async Task<ActionResult> UpdateCourse(int id, CourseUpdateViewModel model)
         {
-            // Gå till databasen och uppdatera en ny kurs...
-            return NoContent();
+            if (!ModelState.IsValid) return BadRequest("Information saknas för att kunna updatera kursen");
+
+            // genom att söka på id kan vi snabbare kontrollerar att kursen inte redan finns i systemet...
+            var course = await _context.Courses.FindAsync(id);
+
+            // om course är null då skickas en BadRequest...
+            if (course is null) return BadRequest($"Vi kan inte hitta en kurs i systemet med {model.Number}");
+
+            // kontrollera att läraren finns i systemet... 
+            var teacher = await _context.Teachers.SingleOrDefaultAsync(c => c.Name!.ToUpper().Trim() == model.Teacher.ToUpper().Trim());
+
+            // om läraren inte finns ...
+            if (teacher is null) return NotFound($"Vi kunde inte hitta någon lärare med namnet {model.Teacher} i vårt system");
+
+
+            // flytta över all information i vår modell till UpdateViewModel
+            // Put ersätter alla egenskaper med ny information 
+            course.Teacher = teacher;
+            course.Number = model.Number;
+            course.Name = model.Name;
+            course.Title = model.Title;
+            course.Start = model.Start;
+            course.End = model.End;
+            course.Content = model.Content;
+
+            // tala om för context och Courses att jag har som syfgte att göra en uyppdatering 
+            _context.Courses.Update(course);
+
+            //kontrollera att vi har får tillbaka något som har ändrats 
+            if (await _context.SaveChangesAsync() > 0)
+            {
+                // Gå till databasen och uppdatera en ny kurs...
+                return NoContent();
+            }
+
+            //annars i värsta fall... 
+            return StatusCode(500, "Internal Server Error");
         }
 
         [HttpPatch("markasfull/{id}")]
