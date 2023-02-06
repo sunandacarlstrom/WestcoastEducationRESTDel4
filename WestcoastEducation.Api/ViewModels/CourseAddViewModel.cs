@@ -1,4 +1,5 @@
 using System.ComponentModel.DataAnnotations;
+using WestcoastEducation.Api.Models;
 
 namespace WestcoastEducation.Api.ViewModels;
 
@@ -22,6 +23,8 @@ public class CourseAddViewModel
 
     [Required(ErrorMessage = "Slutdatum saknas")]
     public DateTime End { get; set; }
+
+    public CourseStatusEnum Status { get; set; }
 
     public string Content { get; set; } = "";
 }

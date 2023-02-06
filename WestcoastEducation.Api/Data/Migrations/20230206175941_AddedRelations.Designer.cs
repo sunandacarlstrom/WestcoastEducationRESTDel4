@@ -11,8 +11,8 @@ using WestcoastEducation.Api.Data;
 namespace WestcoastEducationRESTDel2.api.Data.Migrations
 {
     [DbContext(typeof(WestcoastEducationContext))]
-    [Migration("20230205094403_AddedTeacherSkills")]
-    partial class AddedTeacherSkills
+    [Migration("20230206175941_AddedRelations")]
+    partial class AddedRelations
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -41,14 +41,14 @@ namespace WestcoastEducationRESTDel2.api.Data.Migrations
                     b.Property<DateTime>("Start")
                         .HasColumnType("TEXT");
 
+                    b.Property<int>("Status")
+                        .HasColumnType("INTEGER");
+
                     b.Property<int>("TeacherId")
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("Title")
                         .HasColumnType("TEXT");
-
-                    b.Property<int>("Type")
-                        .HasColumnType("INTEGER");
 
                     b.HasKey("Id");
 

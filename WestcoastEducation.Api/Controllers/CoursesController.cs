@@ -56,8 +56,10 @@ namespace WestcoastEducationRESTDel1.api.Controllers
                 Title = c.Title,
                 Start = c.Start,
                 End = c.End,
+                Status = c.Status.ToString(),
                 Content = c.Content
             })
+
             // jag vill ha tag i ett Id som stämmer överrens med det Id som jag skickar in 
             .SingleOrDefaultAsync(c => c.Id == id);
             return Ok(result);
@@ -77,6 +79,7 @@ namespace WestcoastEducationRESTDel1.api.Controllers
                 Title = c.Title,
                 Start = c.Start,
                 End = c.End,
+                Status = c.Status.ToString(),
                 Content = c.Content
             })
             .SingleOrDefaultAsync(c => c.Number!.ToUpper().Trim() == courseNo.ToUpper().Trim());
@@ -98,6 +101,7 @@ namespace WestcoastEducationRESTDel1.api.Controllers
                 Title = c.Title,
                 Start = c.Start,
                 End = c.End,
+                Status = c.Status.ToString(),
                 Content = c.Content
             })
             // listar alla kurser som WU22 programmets elever har under sin studietid
@@ -121,6 +125,7 @@ namespace WestcoastEducationRESTDel1.api.Controllers
                 Title = c.Title,
                 Start = c.Start,
                 End = c.End,
+                Status = c.Status.ToString(),
                 Content = c.Content
             })
             // listar alla kurser som en specifik lärare håller i 
@@ -146,6 +151,7 @@ namespace WestcoastEducationRESTDel1.api.Controllers
                 Title = c.Title,
                 Start = c.Start,
                 End = c.End,
+                Status = c.Status.ToString(),
                 Content = c.Content
             })
             // listar alla kurser som startar samtidigt
@@ -179,6 +185,7 @@ namespace WestcoastEducationRESTDel1.api.Controllers
                 Teacher = teacher,
                 Name = model.Name,
                 Title = model.Title,
+                Status = model.Status,
                 Content = model.Content
             };
 
@@ -196,7 +203,7 @@ namespace WestcoastEducationRESTDel1.api.Controllers
         [HttpPut("{id}")]
         public async Task<ActionResult> UpdateCourse(int id, CourseUpdateViewModel model)
         {
-            if (!ModelState.IsValid) return BadRequest("Information saknas för att kunna updatera kursen");
+            if (!ModelState.IsValid) return BadRequest("Information saknas för att kunna uppdatera kursen");
 
             // genom att söka på id kan vi snabbare kontrollerar att kursen inte redan finns i systemet...
             var course = await _context.Courses.FindAsync(id);
@@ -219,6 +226,7 @@ namespace WestcoastEducationRESTDel1.api.Controllers
             course.Title = model.Title;
             course.Start = model.Start;
             course.End = model.End;
+            course.Status = model.Status;
             course.Content = model.Content;
 
             // tala om för context och Courses att jag har som syfgte att göra en uyppdatering 
@@ -238,15 +246,47 @@ namespace WestcoastEducationRESTDel1.api.Controllers
         [HttpPatch("markasfull/{id}")]
         public async Task<ActionResult> MarkAsFull(int id)
         {
-            // Gå till databasen och markera en kurs som fullbokad...
-            return NoContent();
+            // hitta kursen  
+            var course = await _context.Courses.FindAsync(id);
+
+            // kontrollerar att kursen existerar
+            if (course is null) return NotFound($"Vi kan inte hitta någon kurs med id: {id}");
+
+            // om den finns så kan vi uppdatera kursen... 
+            course.Status = CourseStatusEnum.FullyBooked;
+
+            _context.Courses.Update(course);
+
+            if (await _context.SaveChangesAsync() > 0)
+            {
+                // Gå till databasen och markera en kurs som fullbokad...
+                return NoContent();
+            }
+
+            return StatusCode(500, "Internal Server Error");
         }
 
         [HttpPatch("markasdone/{id}")]
-        public ActionResult MarkAsDone(int id)
+        public async Task<ActionResult> MarkAsDone(int id)
         {
-            // Gå till databasen och markera en kurs som avklarad...
-            return NoContent();
+            // hitta kursen  
+            var course = await _context.Courses.FindAsync(id);
+
+            // kontrollerar att kursen existerar
+            if (course is null) return NotFound($"Vi kan inte hitta någon kurs med id: {id}");
+
+            // om den finns så kan vi uppdatera kursen... 
+            course.Status = CourseStatusEnum.Ongoing;
+
+            _context.Courses.Update(course);
+
+            if (await _context.SaveChangesAsync() > 0)
+            {
+                // Gå till databasen och markera en kurs som avklarad...
+                return NoContent();
+            }
+
+            return StatusCode(500, "Internal Server Error");
         }
     }
 }

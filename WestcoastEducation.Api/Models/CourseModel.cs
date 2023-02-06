@@ -14,7 +14,7 @@ namespace WestcoastEducation.Api.Models
         public string? Content { get; set; }
         public DateTime Start { get; set; }
         public DateTime End { get; set; }
-        public CourseTypeEnum Type { get; set; }
+        public CourseStatusEnum Status { get; set; }
 
         // The One-Side
         [ForeignKey("TeacherId")]

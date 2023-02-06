@@ -11,7 +11,7 @@ using WestcoastEducation.Api.Data;
 namespace WestcoastEducationRESTDel2.api.Data.Migrations
 {
     [DbContext(typeof(WestcoastEducationContext))]
-    [Migration("20230205091125_InitialCreate")]
+    [Migration("20230206175704_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -41,18 +41,16 @@ namespace WestcoastEducationRESTDel2.api.Data.Migrations
                     b.Property<DateTime>("Start")
                         .HasColumnType("TEXT");
 
+                    b.Property<int>("Status")
+                        .HasColumnType("INTEGER");
+
                     b.Property<int>("TeacherId")
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("Title")
                         .HasColumnType("TEXT");
 
-                    b.Property<int>("Type")
-                        .HasColumnType("INTEGER");
-
                     b.HasKey("Id");
-
-                    b.HasIndex("TeacherId");
 
                     b.ToTable("Courses");
                 });
@@ -73,8 +71,6 @@ namespace WestcoastEducationRESTDel2.api.Data.Migrations
                         .HasColumnType("TEXT");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("CourseId");
 
                     b.ToTable("Students");
                 });
@@ -105,55 +101,12 @@ namespace WestcoastEducationRESTDel2.api.Data.Migrations
                     b.Property<string>("Skill")
                         .HasColumnType("TEXT");
 
-                    b.Property<int?>("TeacherModelId")
+                    b.Property<int>("TeacherId")
                         .HasColumnType("INTEGER");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("TeacherModelId");
-
-                    b.ToTable("Skills");
-                });
-
-            modelBuilder.Entity("WestcoastEducation.Api.Models.CourseModel", b =>
-                {
-                    b.HasOne("WestcoastEducation.Api.Models.TeacherModel", "Teacher")
-                        .WithMany("Courses")
-                        .HasForeignKey("TeacherId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Teacher");
-                });
-
-            modelBuilder.Entity("WestcoastEducation.Api.Models.StudentModel", b =>
-                {
-                    b.HasOne("WestcoastEducation.Api.Models.CourseModel", "Course")
-                        .WithMany("Students")
-                        .HasForeignKey("CourseId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Course");
-                });
-
-            modelBuilder.Entity("WestcoastEducation.Api.Models.TeacherSkillsModel", b =>
-                {
-                    b.HasOne("WestcoastEducation.Api.Models.TeacherModel", null)
-                        .WithMany("Skills")
-                        .HasForeignKey("TeacherModelId");
-                });
-
-            modelBuilder.Entity("WestcoastEducation.Api.Models.CourseModel", b =>
-                {
-                    b.Navigation("Students");
-                });
-
-            modelBuilder.Entity("WestcoastEducation.Api.Models.TeacherModel", b =>
-                {
-                    b.Navigation("Courses");
-
-                    b.Navigation("Skills");
+                    b.ToTable("TeacherSkills");
                 });
 #pragma warning restore 612, 618
         }
