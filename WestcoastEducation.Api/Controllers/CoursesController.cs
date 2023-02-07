@@ -20,7 +20,7 @@ namespace WestcoastEducationRESTDel1.api.Controllers
         public async Task<ActionResult> List()
         {
             var result = await _context.Courses
-            // talar om för EF Core att när du listar Courses vill jag också att du inkluderar det som finns i Teacher-tabellen där jag har en INNER JOIN masking, 
+            // talar om för EF Core att när du listar Courses vill jag också att du inkluderar det som finns i Teacher-tabellen där jag har en INNER JOIN maskning, 
             // alltså teacherId med ett visst värde i Courses måste existera i Teacher som id-kolumn.
             .Include(t => t.Teacher)
             // projicerar resultatet in i min ViewListModel 
@@ -92,6 +92,7 @@ namespace WestcoastEducationRESTDel1.api.Controllers
         {
             var result = await _context.Courses
             .Include(t => t.Teacher)
+            // sätter ett villkor som beskriver vad jag vill söka på 
             .Where(s => s.Title!.ToUpper().Trim() == courseTitle.ToUpper().Trim())
             .Select(c => new CourseDetailsViewModel
             {
@@ -105,7 +106,7 @@ namespace WestcoastEducationRESTDel1.api.Controllers
                 Status = c.Status.ToString(),
                 Content = c.Content
             })
-            // listar alla kurser som WU22 programmets elever har under sin studietid
+            // listar alla kurser som WU22 programmets studenter har under sin studietid
             .ToListAsync();
             return Ok(result);
         }
@@ -115,7 +116,6 @@ namespace WestcoastEducationRESTDel1.api.Controllers
         {
             var result = await _context.Courses
             .Include(t => t.Teacher)
-            // sätter ett villkor där jag beskriver läraren som håller i x kurser
             .Where(s => s.Teacher.Name!.ToUpper().Trim() == teacher.ToUpper().Trim())
             .Select(c => new CourseDetailsViewModel
             {
@@ -206,16 +206,16 @@ namespace WestcoastEducationRESTDel1.api.Controllers
         {
             if (!ModelState.IsValid) return BadRequest("Information saknas för att kunna uppdatera kursen");
 
-            // genom att söka på id kan vi snabbare kontrollerar att kursen inte redan finns i systemet...
+            // genom att söka på id med ".FindAsync" kan vi snabbare kontrollerar att kursen inte redan finns i systemet
             var course = await _context.Courses.FindAsync(id);
 
-            // om course är null då skickas en BadRequest...
+            // om course är null då skickas en BadRequest
             if (course is null) return BadRequest($"Vi kan inte hitta en kurs i systemet med {model.Number}");
 
-            // kontrollera att läraren finns i systemet... 
+            // kontrollera att läraren finns i systemet
             var teacher = await _context.Teachers.SingleOrDefaultAsync(c => c.Name!.ToUpper().Trim() == model.Teacher.ToUpper().Trim());
 
-            // om läraren inte finns ...
+            // om läraren inte finns...
             if (teacher is null) return NotFound($"Vi kunde inte hitta någon lärare med namnet {model.Teacher} i vårt system");
 
             // flytta över all information i vår modell till UpdateViewModel
@@ -229,17 +229,16 @@ namespace WestcoastEducationRESTDel1.api.Controllers
             course.Status = model.Status;
             course.Content = model.Content;
 
-            // tala om för context och Courses att jag har som syfgte att göra en uyppdatering 
+            // tala om för context och Courses att jag har som syfte att göra en uppdatering
             _context.Courses.Update(course);
 
-            //kontrollera att vi har får tillbaka något som har ändrats 
+            //kontrollera att jag har får tillbaka något som har ändrats 
             if (await _context.SaveChangesAsync() > 0)
             {
                 // Gå till databasen och uppdatera en ny kurs...
                 return NoContent();
             }
 
-            //annars i värsta fall... 
             return StatusCode(500, "Internal Server Error");
         }
 
@@ -252,7 +251,7 @@ namespace WestcoastEducationRESTDel1.api.Controllers
             // kontrollerar att kursen existerar
             if (course is null) return NotFound($"Vi kan inte hitta någon kurs med id: {id}");
 
-            // om den finns så kan vi uppdatera kursen... 
+            // om den finns så kan vi uppdatera kursen med angiven status
             course.Status = CourseStatusEnum.FullyBooked;
 
             _context.Courses.Update(course);
@@ -276,7 +275,7 @@ namespace WestcoastEducationRESTDel1.api.Controllers
             if (course is null) return NotFound($"Vi kan inte hitta någon kurs med id: {id}");
 
             // om den finns så kan vi uppdatera kursen... 
-            course.Status = CourseStatusEnum.Ongoing;
+            course.Status = CourseStatusEnum.Completed;
 
             _context.Courses.Update(course);
 
