@@ -57,7 +57,8 @@ namespace WestcoastEducationRESTDel1.api.Controllers
                 Start = c.Start,
                 End = c.End,
                 Status = c.Status.ToString(),
-                Content = c.Content
+                Content = c.Content,
+                Students = c.Students
             })
 
             // jag vill ha tag i ett Id som stämmer överrens med det Id som jag skickar in 
@@ -217,9 +218,8 @@ namespace WestcoastEducationRESTDel1.api.Controllers
             // om läraren inte finns ...
             if (teacher is null) return NotFound($"Vi kunde inte hitta någon lärare med namnet {model.Teacher} i vårt system");
 
-
             // flytta över all information i vår modell till UpdateViewModel
-            // Put ersätter alla egenskaper med ny information 
+            // Put ersätter/uppdaterar alla egenskaper med ny information 
             course.Teacher = teacher;
             course.Number = model.Number;
             course.Name = model.Name;
