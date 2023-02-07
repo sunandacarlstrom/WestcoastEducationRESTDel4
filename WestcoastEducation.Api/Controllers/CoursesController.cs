@@ -251,7 +251,7 @@ namespace WestcoastEducationRESTDel1.api.Controllers
             // kontrollerar att kursen existerar
             if (course is null) return NotFound($"Vi kan inte hitta någon kurs med id: {id}");
 
-            // om den finns så kan vi uppdatera kursen med angiven status
+            // om den finns så kan vi sätta/uppdatera kursens status
             course.Status = CourseStatusEnum.FullyBooked;
 
             _context.Courses.Update(course);
@@ -274,7 +274,7 @@ namespace WestcoastEducationRESTDel1.api.Controllers
             // kontrollerar att kursen existerar
             if (course is null) return NotFound($"Vi kan inte hitta någon kurs med id: {id}");
 
-            // om den finns så kan vi uppdatera kursen... 
+            // om den finns så kan vi sätta/uppdatera kursens status
             course.Status = CourseStatusEnum.Completed;
 
             _context.Courses.Update(course);
