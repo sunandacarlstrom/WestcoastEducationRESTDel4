@@ -25,6 +25,5 @@ public class CourseAddViewModel
     public DateTime End { get; set; }
 
     public CourseStatusEnum Status { get; set; }
-
     public string Content { get; set; } = "";
 }

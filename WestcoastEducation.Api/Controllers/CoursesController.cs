@@ -26,7 +26,7 @@ namespace WestcoastEducationRESTDel1.api.Controllers
             // projicerar resultatet in i min ViewListModel 
             .Select(c => new CourseListViewModel
             {
-                //Här definierar jag vilka kolumner som jag egentligen vill ha tillbaka i (SQL)frågan 
+                // Här definierar jag vilka kolumner som jag egentligen vill ha tillbaka i (SQL)frågan 
                 Id = c.Id,
                 // använder en coalesce operation
                 Teacher = c.Teacher.Name ?? "",
@@ -34,6 +34,7 @@ namespace WestcoastEducationRESTDel1.api.Controllers
                 Name = c.Name,
                 Title = c.Title
             })
+            // listar alla kurser
             .ToListAsync();
             return Ok(result);
         }
@@ -43,6 +44,7 @@ namespace WestcoastEducationRESTDel1.api.Controllers
         {
             var result = await _context.Courses
             .Include(t => t.Teacher)
+            .Include(s => s.Students)
             // måste ha en vymodell (DTO) som vi kan flytta över data ifrån den här frågan till en modell som json kan retunera 
             // projicerar resultatet 
             .Select(c => new CourseDetailsViewModel
@@ -51,6 +53,14 @@ namespace WestcoastEducationRESTDel1.api.Controllers
                 Id = c.Id,
                 // använder en coalesce operation
                 Teacher = c.Teacher.Name ?? "",
+                // listar en lista av studenter i min lista av kurser
+                Students = c.Students.Select(s => new StudentListViewModel
+                {
+                    Id = s.Id,
+                    Name = s.Name,
+                    Course = s.Course.Name ?? "",
+                    Email = s.Email
+                }).ToList(),
                 Number = c.Number,
                 Name = c.Name,
                 Title = c.Title,
@@ -58,7 +68,6 @@ namespace WestcoastEducationRESTDel1.api.Controllers
                 End = c.End,
                 Status = c.Status.ToString(),
                 Content = c.Content,
-                Students = c.Students
             })
 
             // jag vill ha tag i ett Id som stämmer överrens med det Id som jag skickar in 
@@ -71,10 +80,18 @@ namespace WestcoastEducationRESTDel1.api.Controllers
         {
             var result = await _context.Courses
             .Include(t => t.Teacher)
+            .Include(s => s.Students)
             .Select(c => new CourseDetailsViewModel
             {
                 Id = c.Id,
                 Teacher = c.Teacher.Name ?? "",
+                Students = c.Students.Select(s => new StudentListViewModel
+                {
+                    Id = s.Id,
+                    Name = s.Name,
+                    Course = s.Course.Name ?? "",
+                    Email = s.Email
+                }).ToList(),
                 Number = c.Number,
                 Name = c.Name,
                 Title = c.Title,
@@ -92,12 +109,20 @@ namespace WestcoastEducationRESTDel1.api.Controllers
         {
             var result = await _context.Courses
             .Include(t => t.Teacher)
+            .Include(s => s.Students)
             // sätter ett villkor som beskriver vad jag vill söka på 
             .Where(s => s.Title!.ToUpper().Trim() == courseTitle.ToUpper().Trim())
             .Select(c => new CourseDetailsViewModel
             {
                 Id = c.Id,
                 Teacher = c.Teacher.Name ?? "",
+                Students = c.Students.Select(s => new StudentListViewModel
+                {
+                    Id = s.Id,
+                    Name = s.Name,
+                    Course = s.Course.Name ?? "",
+                    Email = s.Email
+                }).ToList(),
                 Number = c.Number,
                 Name = c.Name,
                 Title = c.Title,
@@ -116,11 +141,19 @@ namespace WestcoastEducationRESTDel1.api.Controllers
         {
             var result = await _context.Courses
             .Include(t => t.Teacher)
+            .Include(s => s.Students)
             .Where(s => s.Teacher.Name!.ToUpper().Trim() == teacher.ToUpper().Trim())
             .Select(c => new CourseDetailsViewModel
             {
                 Id = c.Id,
                 Teacher = c.Teacher.Name ?? "",
+                Students = c.Students.Select(s => new StudentListViewModel
+                {
+                    Id = s.Id,
+                    Name = s.Name,
+                    Course = s.Course.Name ?? "",
+                    Email = s.Email
+                }).ToList(),
                 Number = c.Number,
                 Name = c.Name,
                 Title = c.Title,
@@ -142,11 +175,19 @@ namespace WestcoastEducationRESTDel1.api.Controllers
 
             var result = await _context.Courses
             .Include(t => t.Teacher)
+            .Include(s => s.Students)
             .Where(s => s.Start.CompareTo(search) == 0)
             .Select(c => new CourseDetailsViewModel
             {
                 Id = c.Id,
                 Teacher = c.Teacher.Name ?? "",
+                Students = c.Students.Select(s => new StudentListViewModel
+                {
+                    Id = s.Id,
+                    Name = s.Name,
+                    Course = s.Course.Name ?? "",
+                    Email = s.Email
+                }).ToList(),
                 Number = c.Number,
                 Name = c.Name,
                 Title = c.Title,
@@ -282,6 +323,29 @@ namespace WestcoastEducationRESTDel1.api.Controllers
             if (await _context.SaveChangesAsync() > 0)
             {
                 // Gå till databasen och markera en kurs som avklarad...
+                return NoContent();
+            }
+
+            return StatusCode(500, "Internal Server Error");
+        }
+
+        [HttpPatch("setteacher/{id}")]
+        public async Task<ActionResult> SetTeacher(int id, CourseSetTeacherViewModel model)
+        {
+            // hitta kursen  
+            var course = await _context.Courses.FindAsync(id);
+
+            // kontrollerar att kursen existerar
+            if (course is null) return NotFound($"Vi kan inte hitta någon kurs med id: {id}");
+
+            // om den finns så kan vi sätta en lärare till kursen
+            course.TeacherId = model.TeacherId;
+
+            _context.Courses.Update(course);
+
+            if (await _context.SaveChangesAsync() > 0)
+            {
+                // Gå till databasen och sätter en lärare till kursen 
                 return NoContent();
             }
 

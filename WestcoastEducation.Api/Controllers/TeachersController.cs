@@ -1,4 +1,8 @@
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using WestcoastEducation.Api.Data;
+using WestcoastEducation.Api.Models;
+using WestcoastEducation.Api.ViewModels;
 
 namespace WestcoastEducationRESTDel1.api.Controllers
 {
@@ -6,6 +10,12 @@ namespace WestcoastEducationRESTDel1.api.Controllers
     [Route("api/v1/teachers")]
     public class TeachersController : ControllerBase
     {
+        private readonly WestcoastEducationContext _context;
+        public TeachersController(WestcoastEducationContext context)
+        {
+            _context = context;
+        }
+
         [HttpGet()]
         public ActionResult List()
         {
@@ -25,10 +35,40 @@ namespace WestcoastEducationRESTDel1.api.Controllers
         }
 
         [HttpPost()]
-        public ActionResult AddTeacher()
+        public async Task<ActionResult> AddTeacher(TeacherAddViewModel model)
         {
-            // Gå till databasen och lägg till en ny lärare...
-            return Created(nameof(GetById), new { message = "AddTeacher fungerar" });
+            var teacher = new TeacherModel
+            {
+                Name = model.Name,
+                Email = model.Email,
+                Skills = new List<TeacherSkillsModel>() //Skapar en listan för lärarskills.Lägger till skills 2 rader nedanför
+            };
+
+            // loopar igenom listan med skills som man har lagt till och lägger till dessa i läraren 
+            foreach (var item in model.TeacherSkills)
+            {
+                var skill = await _context.TeacherSkills.SingleOrDefaultAsync(c => c.Skill == item.Skill);
+
+                if (skill is not null)
+                {
+                    teacher.Skills.Add(skill);
+                }
+            }
+
+            await _context.Teachers.AddAsync(teacher);
+
+            if (await _context.SaveChangesAsync() > 0)
+            {
+                return CreatedAtAction(nameof(GetById), new { Id = teacher.Id }, new
+                {
+                    Id = teacher.Id,
+                    Name = teacher.Name,
+                    Email = teacher.Email,
+                    Skill = teacher.Skills
+                });
+            }
+
+            return StatusCode(500, "Internal Server Error");
         }
 
         [HttpPut("{id}")]
@@ -47,8 +87,8 @@ namespace WestcoastEducationRESTDel1.api.Controllers
             return Ok(new { message = $"Lista vilka kurser som en lärare undervisar fungerar {id}" });
         }
 
-        [HttpPatch("add-teacher-to-course/{id}")]
-        public ActionResult AddTeacherToCourse(int id)
+        [HttpPatch("add-course-to-teacher/{id}")]
+        public ActionResult AddCourseToTeacher(int id)
         {
             // Gå till databasen och lägg till kurs som lärare kan undervisa i...
             return NoContent();
