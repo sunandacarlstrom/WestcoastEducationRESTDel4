@@ -1,7 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 
 namespace WestcoastEducation.Api.Models;
-
 public class TeacherModel
 {
     [Key]

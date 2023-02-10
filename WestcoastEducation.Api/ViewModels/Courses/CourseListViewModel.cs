@@ -1,7 +1,4 @@
-using WestcoastEducation.Api.Models;
-
 namespace WestcoastEducation.Api.ViewModels;
-
 public class CourseListViewModel
 {
     public int Id { get; set; }

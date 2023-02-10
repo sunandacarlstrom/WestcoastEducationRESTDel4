@@ -1,12 +1,10 @@
 using System.ComponentModel.DataAnnotations;
 
 namespace WestcoastEducation.Api.ViewModels;
-
-public class StudentAddListViewModel
+public class StudentUpdateViewModel
 {
-    // [Required(ErrorMessage = " för kursen saknas")] ????
-    // ska jag ens ha med denna?? Tog bort studentId eftersom det genereras automatiskt
-    public int CourseId { get; set; }
+    [Required(ErrorMessage = "Kurs saknas")]
+    public string Course { get; set; } = "";
 
     [Required(ErrorMessage = "Studentens namn saknas")]
     public string? Name { get; set; }

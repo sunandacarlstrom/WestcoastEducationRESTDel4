@@ -2,7 +2,6 @@ using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace WestcoastEducation.Api.Models;
-
 public class StudentModel
 {
     [Key]

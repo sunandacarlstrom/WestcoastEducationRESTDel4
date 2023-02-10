@@ -1,5 +1,4 @@
 namespace WestcoastEducation.Api.ViewModels;
-
 public class CourseDetailsViewModel
 {
     public int Id { get; set; }
@@ -12,5 +11,5 @@ public class CourseDetailsViewModel
     public string? Status { get; set; }
     public string Content { get; set; } = "";
 
-    public List<StudentListViewModel>? Students { get; set; }
+    public ICollection<StudentListViewModel>? Students { get; set; }
 }

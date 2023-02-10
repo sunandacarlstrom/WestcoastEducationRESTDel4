@@ -2,7 +2,6 @@ using System.Text.Json;
 using WestcoastEducation.Api.Models;
 
 namespace WestcoastEducation.Api.Data;
-
 public static class SeedData
 {
     public static async Task LoadCourseData(WestcoastEducationContext context)
