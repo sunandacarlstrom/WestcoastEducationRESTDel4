@@ -41,7 +41,7 @@ namespace WestcoastEducationRESTDel2.api.Data.Migrations
                     b.Property<int>("Status")
                         .HasColumnType("INTEGER");
 
-                    b.Property<int>("TeacherId")
+                    b.Property<int?>("TeacherId")
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("Title")
@@ -60,7 +60,7 @@ namespace WestcoastEducationRESTDel2.api.Data.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
-                    b.Property<int>("CourseId")
+                    b.Property<int?>("CourseId")
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("Email")
@@ -102,7 +102,7 @@ namespace WestcoastEducationRESTDel2.api.Data.Migrations
                     b.Property<string>("Skill")
                         .HasColumnType("TEXT");
 
-                    b.Property<int>("TeacherId")
+                    b.Property<int?>("TeacherId")
                         .HasColumnType("INTEGER");
 
                     b.HasKey("Id");
@@ -116,9 +116,7 @@ namespace WestcoastEducationRESTDel2.api.Data.Migrations
                 {
                     b.HasOne("WestcoastEducation.Api.Models.TeacherModel", "Teacher")
                         .WithMany("Courses")
-                        .HasForeignKey("TeacherId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("TeacherId");
 
                     b.Navigation("Teacher");
                 });
@@ -127,9 +125,7 @@ namespace WestcoastEducationRESTDel2.api.Data.Migrations
                 {
                     b.HasOne("WestcoastEducation.Api.Models.CourseModel", "Course")
                         .WithMany("Students")
-                        .HasForeignKey("CourseId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("CourseId");
 
                     b.Navigation("Course");
                 });
@@ -138,9 +134,7 @@ namespace WestcoastEducationRESTDel2.api.Data.Migrations
                 {
                     b.HasOne("WestcoastEducation.Api.Models.TeacherModel", "Teacher")
                         .WithMany("Skills")
-                        .HasForeignKey("TeacherId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("TeacherId");
 
                     b.Navigation("Teacher");
                 });

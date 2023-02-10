@@ -17,7 +17,7 @@ namespace WestcoastEducationRESTDel1.api.Controllers
             _context = context;
         }
 
-        [HttpGet()]
+        [HttpGet("listall")]
         public async Task<ActionResult> ListAll()
         {
             var result = await _context.Students
@@ -31,7 +31,7 @@ namespace WestcoastEducationRESTDel1.api.Controllers
             return Ok(result);
         }
 
-        [HttpGet("{id}")]
+        [HttpGet("getbyid/{id}")]
         public async Task<ActionResult> GetById(int id)
         {
             var result = await _context.Students
@@ -40,25 +40,25 @@ namespace WestcoastEducationRESTDel1.api.Controllers
             {
                 Id = s.Id,
                 Name = s.Name,
-                Course = s.Course!.Name ?? "",
+                Course = s.Course.Name ?? "",
                 Email = s.Email
             })
             .SingleOrDefaultAsync(s => s.Id == id);
             return Ok(result);
         }
 
-        [HttpGet("email/{email}")]
+        [HttpGet("getbyemail/{email}")]
         public async Task<ActionResult> GetByEmail(string email)
         {
             var result = await _context.Students
                 .Include(c => c.Course)
                 // sätter ett villkor som beskriver vad jag vill söka på
-                .Where(s => s.Email!.ToUpper().Trim() == email.ToUpper().Trim())
+                .Where(s => s.Email.ToUpper().Trim() == email.ToUpper().Trim())
                 .Select(s => new StudentDetailsViewModel
                 {
                     Id = s.Id,
                     Name = s.Name,
-                    Course = s.Course!.Name ?? "",
+                    Course = s.Course.Name ?? "",
                     Email = s.Email
                 })
             .ToListAsync();
@@ -68,7 +68,7 @@ namespace WestcoastEducationRESTDel1.api.Controllers
         [HttpPost()]
         public async Task<ActionResult> AddStudent(StudentAddListViewModel model)
         {
-            if (!ModelState.IsValid) return BadRequest("Information saknas för att kunna uppdatera kursen");
+            if (!ModelState.IsValid) return BadRequest("Information saknas för att kunna lägga till en student");
 
             // kontrollerar om studenten redan finns i systemet     
             var exists = await _context.Students.SingleOrDefaultAsync(s =>
@@ -76,7 +76,7 @@ namespace WestcoastEducationRESTDel1.api.Controllers
 
             if (exists is not null) return BadRequest($"Studenten med e-post {model.Email} finns redan i systemet");
 
-            var course = await _context.Courses.SingleOrDefaultAsync(c => c.Name!.ToUpper().Trim() == model.Course.ToUpper().Trim());
+            var course = await _context.Courses.SingleOrDefaultAsync(c => c.Name.ToUpper().Trim() == model.Course.ToUpper().Trim());
             if (course is null) return NotFound($"Vi kunde inte hitta en kurs med namnet {model.Course} i vårt system");
 
             var student = new StudentModel
@@ -102,13 +102,13 @@ namespace WestcoastEducationRESTDel1.api.Controllers
 
         public async Task<ActionResult> UpdateStudent(int id, StudentUpdateViewModel model)
         {
-            if (!ModelState.IsValid) return BadRequest("Information saknas för att kunna uppdatera kursen");
+            if (!ModelState.IsValid) return BadRequest("Information saknas för att kunna uppdatera studenten");
 
             var student = await _context.Students.FindAsync(id);
 
             if (student is null) return NotFound($"Vi kunde inte hitta en student med {model.Name} i vårt system");
 
-            var course = await _context.Courses.SingleOrDefaultAsync(c => c.Name!.ToUpper().Trim() == model.Course.ToUpper().Trim());
+            var course = await _context.Courses.SingleOrDefaultAsync(c => c.Name.ToUpper().Trim() == model.Course.ToUpper().Trim());
 
             // Put ersätter/uppdaterar alla egenskaper med ny information 
             student.Course = course;
@@ -128,8 +128,8 @@ namespace WestcoastEducationRESTDel1.api.Controllers
             return StatusCode(500, "Internal Server Error");
         }
 
-        [HttpPatch("addcourse/{studentId}")]
-        public async Task<ActionResult> AddCourse(int studentId, StudentAddCourseViewModel model)
+        [HttpPatch("setcourse/{studentId}")]
+        public async Task<ActionResult> SetCourse(int studentId, StudentAddCourseViewModel model)
         {
             var student = await _context.Students.FindAsync(studentId);
             if (student is null) return NotFound($"Tyvärr kunde vi inte hitta någon student med id {studentId}");
@@ -163,7 +163,7 @@ namespace WestcoastEducationRESTDel1.api.Controllers
             var course = await _context.Courses.FindAsync(student.CourseId);
             if (course is null) return NotFound("Studenten är inte anmäld på någon kurs");
 
-            course.Students!.Remove(student);
+            course.Students.Remove(student);
             if (await _context.SaveChangesAsync() > 0)
             {
                 return NoContent();
@@ -172,24 +172,23 @@ namespace WestcoastEducationRESTDel1.api.Controllers
             return StatusCode(500, "Internal Server Error");
         }
 
-        // //TODO: Vill egentligen ta bort endast kursen från en student, inte hela studenten. Har ännu inte lärt oss Many-To-Many förhållande.
-        // [HttpDelete("delete/{studentId}")]
-        // public async Task<ActionResult> Delete(int studentId)
-        // {
-        //     //hämta in kursen som jag vill radera hos en student
-        //     var student = await _context.Students.FindAsync(studentId);
-        //     if (student is null) return NotFound($"Student med Id {studentId} kunde inte hittas");
+        [HttpDelete("{id}")]
+        public async Task<ActionResult> DeleteStudent(int id)
+        {
+            //hämta in studenten som jag vill radera från systemet
+            var student = await _context.Students.FindAsync(id);
+            if (student is null) return NotFound($"Student med Id {id} kunde inte hittas");
 
-        //     var course = await _context.Courses.FindAsync(student.CourseId);
-        //     if (course is null) return NotFound("Studenten är inte anmäld på någon kurs");
+            var course = await _context.Courses.FindAsync(student.CourseId);
+            if (course is null) return NotFound("Studenten är inte anmäld på någon kurs");
 
-        //     course.Students!.Remove(student);
-        //     if (await _context.SaveChangesAsync() > 0)
-        //     {
-        //         return NoContent();
-        //     }
+            course.Students.Remove(student);
+            if (await _context.SaveChangesAsync() > 0)
+            {
+                return NoContent();
+            }
 
-        //     return StatusCode(500, "Internal Server Error");
-        // }
+            return StatusCode(500, "Internal Server Error");
+        }
     }
 }

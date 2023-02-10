@@ -17,7 +17,7 @@ namespace WestcoastEducationRESTDel1.api.Controllers
             _context = context;
         }
 
-        [HttpGet]
+        [HttpGet("listall")]
         public async Task<ActionResult> ListAll()
         {
             var result = await _context.Courses
@@ -30,7 +30,7 @@ namespace WestcoastEducationRESTDel1.api.Controllers
             {
                 // Här definierar jag vilka kolumner som jag egentligen vill ha tillbaka i (SQL)frågan 
                 Id = c.Id,
-                Teacher = c.Teacher!.Name ?? "",
+                Teacher = c.Teacher.Name ?? "",
                 Number = c.Number,
                 Name = c.Name,
                 Title = c.Title
@@ -40,7 +40,7 @@ namespace WestcoastEducationRESTDel1.api.Controllers
             return Ok(result);
         }
 
-        [HttpGet("{id}")]
+        [HttpGet("getbyid/{id}")]
         public async Task<ActionResult> GetById(int id)
         {
             var result = await _context.Courses
@@ -49,9 +49,9 @@ namespace WestcoastEducationRESTDel1.api.Controllers
             .Select(c => new CourseDetailsViewModel
             {
                 Id = c.Id,
-                Teacher = c.Teacher!.Name ?? "",
+                Teacher = c.Teacher.Name ?? "",
                 // listar en lista av studenter i min lista av kurser
-                Students = c.Students!.Select(s => new StudentListViewModel
+                Students = c.Students.Select(s => new StudentListViewModel
                 {
                     Id = s.Id,
                     Name = s.Name,
@@ -71,7 +71,7 @@ namespace WestcoastEducationRESTDel1.api.Controllers
             return Ok(result);
         }
 
-        [HttpGet("courseno/{courseNo}")]
+        [HttpGet("getbycourseno/{courseNo}")]
         public async Task<ActionResult> GetByCourseNumber(string courseNo)
         {
             var result = await _context.Courses
@@ -80,8 +80,8 @@ namespace WestcoastEducationRESTDel1.api.Controllers
             .Select(c => new CourseDetailsViewModel
             {
                 Id = c.Id,
-                Teacher = c.Teacher!.Name ?? "",
-                Students = c.Students!.Select(s => new StudentListViewModel
+                Teacher = c.Teacher.Name ?? "",
+                Students = c.Students.Select(s => new StudentListViewModel
                 {
                     Id = s.Id,
                     Name = s.Name,
@@ -95,23 +95,23 @@ namespace WestcoastEducationRESTDel1.api.Controllers
                 Status = c.Status.ToString(),
                 Content = c.Content ?? ""
             })
-            .SingleOrDefaultAsync(c => c.Number!.ToUpper().Trim() == courseNo.ToUpper().Trim());
+            .SingleOrDefaultAsync(c => c.Number.ToUpper().Trim() == courseNo.ToUpper().Trim());
             return Ok(result);
         }
 
-        [HttpGet("coursetitle/{courseTitle}")]
+        [HttpGet("getbycoursetitle/{courseTitle}")]
         public async Task<ActionResult> GetByCourseTitle(string courseTitle)
         {
             var result = await _context.Courses
             .Include(t => t.Teacher)
             .Include(s => s.Students)
             // sätter ett villkor som beskriver vad jag vill söka på 
-            .Where(s => s.Title!.ToUpper().Trim() == courseTitle.ToUpper().Trim())
+            .Where(s => s.Title.ToUpper().Trim() == courseTitle.ToUpper().Trim())
             .Select(c => new CourseDetailsViewModel
             {
                 Id = c.Id,
-                Teacher = c.Teacher!.Name ?? "",
-                Students = c.Students!.Select(s => new StudentListViewModel
+                Teacher = c.Teacher.Name ?? "",
+                Students = c.Students.Select(s => new StudentListViewModel
                 {
                     Id = s.Id,
                     Name = s.Name,
@@ -130,18 +130,18 @@ namespace WestcoastEducationRESTDel1.api.Controllers
             return Ok(result);
         }
 
-        [HttpGet("teacher/{teacher}")]
+        [HttpGet("getbyteacher/{teacher}")]
         public async Task<ActionResult> GetByTeacher(string teacher)
         {
             var result = await _context.Courses
             .Include(t => t.Teacher)
             .Include(s => s.Students)
-            .Where(s => s.Teacher.Name!.ToUpper().Trim() == teacher.ToUpper().Trim())
+            .Where(s => s.Teacher.Name.ToUpper().Trim() == teacher.ToUpper().Trim())
             .Select(c => new CourseDetailsViewModel
             {
                 Id = c.Id,
-                Teacher = c.Teacher!.Name ?? "",
-                Students = c.Students!.Select(s => new StudentListViewModel
+                Teacher = c.Teacher.Name ?? "",
+                Students = c.Students.Select(s => new StudentListViewModel
                 {
                     Id = s.Id,
                     Name = s.Name,
@@ -160,7 +160,7 @@ namespace WestcoastEducationRESTDel1.api.Controllers
             return Ok(result);
         }
 
-        [HttpGet("coursestart/{year}/{month}/{day}")]
+        [HttpGet("getbycoursestart/{year}/{month}/{day}")]
         public async Task<ActionResult> GetByCourseStart(int year, int month, int day)
         {
             // skapar en DateTime-variabel för att kunna använda ".CompareTo" nedanför
@@ -173,8 +173,8 @@ namespace WestcoastEducationRESTDel1.api.Controllers
             .Select(c => new CourseDetailsViewModel
             {
                 Id = c.Id,
-                Teacher = c.Teacher!.Name ?? "",
-                Students = c.Students!.Select(s => new StudentListViewModel
+                Teacher = c.Teacher.Name ?? "",
+                Students = c.Students.Select(s => new StudentListViewModel
                 {
                     Id = s.Id,
                     Name = s.Name,
@@ -198,16 +198,16 @@ namespace WestcoastEducationRESTDel1.api.Controllers
         {
             // kontrollerar att jag har fått in allting korrekt... 
             // BadRequest ger statuskoden 400
-            if (!ModelState.IsValid) return BadRequest("Information saknas för att kunna lagra kursen i systemet");
+            if (!ModelState.IsValid) return BadRequest("Information saknas för att kunna lägga till kursen i systemet");
 
             // kontrollerar att kursen inte redan finns i systemet...
-            var exists = await _context.Courses.SingleOrDefaultAsync(c => c.Number!.ToUpper().Trim() == model.Number!.ToUpper().Trim());
+            var exists = await _context.Courses.SingleOrDefaultAsync(c => c.Number.ToUpper().Trim() == model.Number.ToUpper().Trim());
 
             // om exits inte är null då skickas en BadRequest...
             if (exists is not null) return BadRequest($"Vi har redan registrerat en kurs med kursnummer {model.Number}");
 
             // kontrollera att läraren finns i systemet... 
-            var teacher = await _context.Teachers.SingleOrDefaultAsync(c => c.Name!.ToUpper().Trim() == model.Teacher.ToUpper().Trim());
+            var teacher = await _context.Teachers.SingleOrDefaultAsync(c => c.Name.ToUpper().Trim() == model.Teacher.ToUpper().Trim());
 
             // om läraren inte finns ...
             if (teacher is null) return NotFound($"Vi kunde inte hitta någon lärare med namnet {model.Teacher} i vårt system");
@@ -227,7 +227,20 @@ namespace WestcoastEducationRESTDel1.api.Controllers
 
             if (await _context.SaveChangesAsync() > 0)
             {
-                return Created(nameof(GetById), new { id = course.Id });
+                var added = new CourseDetailsViewModel
+                {
+                    Id = course.Id,
+                    Teacher = course.Teacher.Name ?? "",
+                    Number = course.Number,
+                    Name = course.Name,
+                    Title = course.Title,
+                    Start = course.Start,
+                    End = course.End,
+                    Status = course.Status.ToString(),
+                    Content = course.Content ?? ""
+                };
+                //retunerar också ett nytt objekt 
+                return CreatedAtAction(nameof(GetById), new { id = course.Id }, added);
             }
 
             // när jag gör SaveChangesAsync i ett if-uttryck så måste jag här retunera ett felmeddelande som säger "Ett oväntat fel har uppstått"
@@ -246,7 +259,7 @@ namespace WestcoastEducationRESTDel1.api.Controllers
             if (course is null) return BadRequest($"Vi kan inte hitta en kurs i systemet med {model.Number}");
 
             // kontrollera att läraren finns i systemet
-            var teacher = await _context.Teachers.SingleOrDefaultAsync(c => c.Name!.ToUpper().Trim() == model.Teacher.ToUpper().Trim());
+            var teacher = await _context.Teachers.SingleOrDefaultAsync(c => c.Name.ToUpper().Trim() == model.Teacher.ToUpper().Trim());
 
             // om läraren inte finns...
             if (teacher is null) return NotFound($"Vi kunde inte hitta någon lärare med namnet {model.Teacher} i vårt system");
@@ -275,8 +288,8 @@ namespace WestcoastEducationRESTDel1.api.Controllers
             return StatusCode(500, "Internal Server Error");
         }
 
-        [HttpPatch("markasfull/{id}")]
-        public async Task<ActionResult> MarkAsFull(int id)
+        [HttpPatch("setstatus/asfull/{id}")]
+        public async Task<ActionResult> SetStatusAsFull(int id)
         {
             // hitta kursen  
             var course = await _context.Courses.FindAsync(id);
@@ -298,8 +311,8 @@ namespace WestcoastEducationRESTDel1.api.Controllers
             return StatusCode(500, "Internal Server Error");
         }
 
-        [HttpPatch("markasdone/{id}")]
-        public async Task<ActionResult> MarkAsDone(int id)
+        [HttpPatch("setstatus/asdone/{id}")]
+        public async Task<ActionResult> SetStatusAsDone(int id)
         {
             // hitta kursen  
             var course = await _context.Courses.FindAsync(id);
@@ -378,7 +391,7 @@ namespace WestcoastEducationRESTDel1.api.Controllers
         {
             var course = await _context.Courses.FindAsync(id);
 
-            if (course is null) return NotFound($"Vi kan inte hitta någon bil med id: {id}");
+            if (course is null) return NotFound($"Vi kan inte hitta någon kurs med id: {id}");
 
             _context.Courses.Remove(course);
 
