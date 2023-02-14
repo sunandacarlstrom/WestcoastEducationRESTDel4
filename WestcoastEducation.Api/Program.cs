@@ -1,5 +1,8 @@
+using System.Text;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 using WestcoastEducation.Api.Data;
 using WestcoastEducation.Api.Models;
 using WestcoastEducation.Api.Services;
@@ -15,9 +18,12 @@ builder.Services.AddDbContext<WestcoastEducationContext>(options =>
 });
 
 // Setup Identity...
-builder.Services.AddIdentityCore<UserModel>()
-.AddRoles<IdentityRole>()
-.AddEntityFrameworkStores<WestcoastEducationContext>();
+builder.Services.AddIdentityCore<UserModel>(options =>
+{
+    options.User.RequireUniqueEmail = true;
+})
+    .AddRoles<IdentityRole>()
+    .AddEntityFrameworkStores<WestcoastEducationContext>();
 
 // makes TokenService available 
 builder.Services.AddScoped<TokenService>();
@@ -26,6 +32,22 @@ builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+
+// makes Authentication with JWT available 
+builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+    .AddJwtBearer(options =>
+    {
+        options.TokenValidationParameters = new TokenValidationParameters
+        {
+            ValidateIssuer = false,
+            ValidateAudience = false,
+            ValidateLifetime = true,
+            ValidateIssuerSigningKey = true,
+            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration.GetSection("tokenSettings:tokenKey").Value))
+        };
+    });
+
+builder.Services.AddAuthorization();
 
 var app = builder.Build();
 

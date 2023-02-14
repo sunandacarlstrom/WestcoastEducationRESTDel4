@@ -26,15 +26,15 @@ public static class SeedData
         {
             var admin = new UserModel
             {
-                UserName = "mats@gmail.com",
-                Email = "mats@gmail.com",
-                FirstName = "Mats",
-                LastName = "Johansson"
+                UserName = "sunanda.carlstrom@gmail.com",
+                Email = "sunanda.carlstrom@gmail.com",
+                FirstName = "Sunanda",
+                LastName = "Carlström"
             };
 
             // skapa och spara direkt till databasen 
             await userManager.CreateAsync(admin, "Pa$$w0rd");
-            // placera användaren Mats i rollen som admin och gör så att han kommer åt alla roller i systemet  
+            // placera användaren Sunanda i rollen admin och gör så att hon kommer åt alla roller i systemet  
             await userManager.AddToRolesAsync(admin, new[] { "Admin", "Student", "Teacher" });
 
             // skapar en ny användare 

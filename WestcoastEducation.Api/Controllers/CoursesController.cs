@@ -19,8 +19,8 @@ namespace WestcoastEducationRESTDel1.api.Controllers
         }
 
         [HttpGet("listall")]
-        // //endast tillgänglig för användare med rollen Teacher
-        // [Authorize(Roles = "Teacher")]
+        //endast tillgänglig för användare med rollen Teacher
+        [Authorize(Roles = "Teacher")]
         public async Task<ActionResult> ListAll()
         {
             var result = await _context.Courses
