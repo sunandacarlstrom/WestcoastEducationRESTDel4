@@ -302,8 +302,8 @@ namespace WestcoastEducationRESTDel1.api.Controllers
             var student = await _context.Students.FindAsync(model.Id);
             if (student is null) return NotFound($"Tyvärr kunde vi inte hitta någon student med id {model.Id}");
 
-            //Om inte är initzerard skapas en lista för det inte ska blir null när man lägger till kompetens nedanför
-            //efter sopm en lärare kan ha flera skills
+            //Om inte är initierad skapas en lista för det inte ska bli null när man lägger till kompetens nedanför
+            //eftersom en kurs kan ha flera studenter
             if (course.Students is null) course.Students = new List<StudentModel>();
 
             course.Students.Add(student);
