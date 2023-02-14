@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using WestcoastEducation.Api.Data;
 using WestcoastEducation.Api.Models;
+using WestcoastEducation.Api.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -18,6 +19,9 @@ builder.Services.AddDbContext<WestcoastEducationContext>(options =>
 builder.Services.AddIdentityCore<UserModel>()
 .AddRoles<IdentityRole>()
 .AddEntityFrameworkStores<WestcoastEducationContext>();
+
+// makes TokenService available 
+builder.Services.AddScoped<TokenService>();
 
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle

@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using WestcoastEducation.Api.Models;
+using WestcoastEducation.Api.Services;
 using WestcoastEducation.Api.ViewModels.Account;
 
 namespace WestcoastEducation.Api.Controllers;
@@ -9,8 +10,10 @@ namespace WestcoastEducation.Api.Controllers;
 public class AccountController : ControllerBase
 {
     private readonly UserManager<UserModel> _userManager;
-    public AccountController(UserManager<UserModel> userManager)
+    private readonly TokenService _tokenService;
+    public AccountController(UserManager<UserModel> userManager, TokenService tokenService)
     {
+        _tokenService = tokenService;
         _userManager = userManager;
     }
 
@@ -24,6 +27,11 @@ public class AccountController : ControllerBase
         {
             return Unauthorized();
         }
-        return Ok(user);
+
+        //retunerar en vymodell för användaren som även skapar ett nytt Token 
+        return Ok(new UserViewModel {
+            Email = user.Email, 
+            Token = await _tokenService.CreateToken(user)
+        });
     }
 }
