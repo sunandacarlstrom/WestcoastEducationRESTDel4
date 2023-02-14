@@ -291,6 +291,35 @@ namespace WestcoastEducationRESTDel1.api.Controllers
             return StatusCode(500, "Internal Server Error");
         }
 
+        [HttpPatch("addstudent/{courseId}")]
+        public async Task<ActionResult> AddStudent(int courseId, CourseAddStudentViewModel model)
+        {
+            var course = await _context.Courses
+            .SingleOrDefaultAsync(t => t.Id == courseId);
+
+            if (course is null) return BadRequest($"Vi kunde inte hitta en kurs med id {courseId}");
+
+            var student = await _context.Students.FindAsync(model.Id);
+            if (student is null) return NotFound($"Tyvärr kunde vi inte hitta någon student med id {model.Id}");
+
+            //Om inte är initzerard skapas en lista för det inte ska blir null när man lägger till kompetens nedanför
+            //efter sopm en lärare kan ha flera skills
+            if (course.Students is null) course.Students = new List<StudentModel>();
+
+            course.Students.Add(student);
+
+            _context.Update(course);
+
+            //kontrollera att jag har får tillbaka något som har ändrats 
+            if (await _context.SaveChangesAsync() > 0)
+            {
+                // Gå till databasen och uppdatera en lärare...
+                return NoContent();
+            }
+
+            return StatusCode(500, "Internal Server Error");
+        }
+
         [HttpPatch("setstatus/asfull/{id}")]
         public async Task<ActionResult> SetStatusAsFull(int id)
         {
@@ -354,35 +383,6 @@ namespace WestcoastEducationRESTDel1.api.Controllers
             if (await _context.SaveChangesAsync() > 0)
             {
                 // Gå till databasen och sätter en lärare till kursen 
-                return NoContent();
-            }
-
-            return StatusCode(500, "Internal Server Error");
-        }
-
-        [HttpPatch("addstudent/{courseId}")]
-        public async Task<ActionResult> AddStudent(int courseId, CourseAddStudentViewModel model)
-        {
-            var course = await _context.Courses
-            .SingleOrDefaultAsync(t => t.Id == courseId);
-
-            if (course is null) return BadRequest($"Vi kunde inte hitta en kurs med id {courseId}");
-
-            var student = await _context.Students.FindAsync(model.Id);
-            if (student is null) return NotFound($"Tyvärr kunde vi inte hitta någon student med id {model.Id}");
-
-            //Om inte är initzerard skapas en lista för det inte ska blir null när man lägger till kompetens nedanför
-            //efter sopm en lärare kan ha flera skills
-            if (course.Students is null) course.Students = new List<StudentModel>();
-
-            course.Students.Add(student);
-
-            _context.Update(course);
-
-            //kontrollera att jag har får tillbaka något som har ändrats 
-            if (await _context.SaveChangesAsync() > 0)
-            {
-                // Gå till databasen och uppdatera en lärare...
                 return NoContent();
             }
 
