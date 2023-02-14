@@ -55,6 +55,5 @@ public class TokenService
 
         // få tillbaka JWT SecurityToken som en sträng
         return new JwtSecurityTokenHandler().WriteToken(options);
-
     }
 }

@@ -29,9 +29,45 @@ public class AccountController : ControllerBase
         }
 
         //retunerar en vymodell för användaren som även skapar ett nytt Token 
-        return Ok(new UserViewModel {
-            Email = user.Email, 
+        return Ok(new UserViewModel
+        {
+            Email = user.Email,
             Token = await _tokenService.CreateToken(user)
         });
+    }
+
+    [HttpPost("register")]
+    public async Task<ActionResult> Register(RegisterViewModel model)
+    {
+
+        //objektet som ska registreras och läggas till i systemet 
+        var user = new UserModel
+        {
+            UserName = model.UserName,
+            Email = model.Email,
+            FirstName = model.FirstName,
+            LastName = model.LastName
+        };
+
+        // skapar användaren och sparar ner direkt till databasen 
+        var result = await _userManager.CreateAsync(user, model.Password);
+
+        // tittar på listan av fel som genereas av Identity biblioteket 
+        if (!result.Succeeded)
+        {
+            foreach (var error in result.Errors)
+            {
+                ModelState.AddModelError(error.Code, error.Description);
+            }
+
+            // returnerar alla meddelanden som jag får in i ModelState 
+            return ValidationProblem();
+        }
+
+        // ger användaren en standardroll som "User" då detta är en publik hantering där användararna själva registrerar sig i systemet
+        // övriga roller såsom "Student" & "Teacher" görs under admin-verktyg
+        await _userManager.AddToRoleAsync(user, "User");
+        // vill inte automatiskt logga in användaren, endast retunera ett OK! 
+        return StatusCode(201);
     }
 }
