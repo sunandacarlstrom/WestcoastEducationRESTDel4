@@ -15,7 +15,7 @@ public static class SeedData
             var student = new IdentityRole { Name = "Student", NormalizedName = "STUDENT" };
             var teacher = new IdentityRole { Name = "Teacher", NormalizedName = "TEACHER" };
 
-            // spara till databasen 
+            // skapa och spara direkt till databasen 
             await roleManager.CreateAsync(admin);
             await roleManager.CreateAsync(student);
             await roleManager.CreateAsync(teacher);
@@ -26,15 +26,15 @@ public static class SeedData
         {
             var admin = new UserModel
             {
-                UserName = "sunanda.carlstrom@gmail.com",
-                Email = "sunanda.carlstrom@gmail.com",
-                FirstName = "Sunanda",
-                LastName = "Carlström"
+                UserName = "mats@gmail.com",
+                Email = "mats@gmail.com",
+                FirstName = "Mats",
+                LastName = "Johansson"
             };
 
-            // spara till databasen 
+            // skapa och spara direkt till databasen 
             await userManager.CreateAsync(admin, "Pa$$w0rd");
-            // placera användaren Sunanda i rollen admin och gör så att hon kommer åt alla roller i systemet  
+            // placera användaren Mats i rollen som admin och gör så att han kommer åt alla roller i systemet  
             await userManager.AddToRolesAsync(admin, new[] { "Admin", "Student", "Teacher" });
 
             // skapar en ny användare 
