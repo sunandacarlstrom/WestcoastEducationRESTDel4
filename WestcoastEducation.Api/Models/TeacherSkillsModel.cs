@@ -9,7 +9,7 @@ public class TeacherSkillsModel
     public int? TeacherId { get; set; }
     public string Skill { get; set; }
 
-    // The One-Side
+    // The One-Side (composition)
     [ForeignKey("TeacherId")]
     public TeacherModel Teacher { get; set; }
 }

@@ -15,10 +15,10 @@ public class CourseModel
     public DateTime End { get; set; }
     public CourseStatusEnum Status { get; set; }
 
-    // The One-Side
+    // The One-Side (composition)
     [ForeignKey("TeacherId")]
     public TeacherModel Teacher { get; set; }
 
-    //The Many-Side
+    //The Many-Side (aggregation)
     public ICollection<StudentModel> Students { get; set; }
 }

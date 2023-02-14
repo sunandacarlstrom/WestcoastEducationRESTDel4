@@ -8,9 +8,9 @@ public class TeacherModel
     public string Name { get; set; }
     public string Email { get; set; }
 
-    //The Many-Side 
+    //The Many-Side (aggregation)
     public ICollection<CourseModel> Courses { get; set; }
 
-    //The Many-Side
+    //The Many-Side (aggregation)
     public ICollection<TeacherSkillsModel> Skills { get; set; }
 }

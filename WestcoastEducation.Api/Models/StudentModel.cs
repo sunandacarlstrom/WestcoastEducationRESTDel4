@@ -10,7 +10,7 @@ public class StudentModel
     public string Name { get; set; }
     public string Email { get; set; }
 
-    // The One-Side
+    // The One-Side (composition)
     [ForeignKey("CourseId")]
     public CourseModel Course { get; set; }
 }
