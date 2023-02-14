@@ -1,9 +1,68 @@
 using System.Text.Json;
+using Microsoft.AspNetCore.Identity;
 using WestcoastEducation.Api.Models;
 
 namespace WestcoastEducation.Api.Data;
 public static class SeedData
 {
+
+    public static async Task LoadRolesAndUsers(UserManager<UserModel> userManager, RoleManager<IdentityRole> roleManager)
+    {
+        // om det inte finns någoting i min roleManager då vill jag kunna skapa 3 olika roller
+        if (!roleManager.Roles.Any())
+        {
+            var admin = new IdentityRole { Name = "Admin", NormalizedName = "ADMIN" };
+            var student = new IdentityRole { Name = "Student", NormalizedName = "STUDENT" };
+            var teacher = new IdentityRole { Name = "Teacher", NormalizedName = "TEACHER" };
+
+            // spara till databasen 
+            await roleManager.CreateAsync(admin);
+            await roleManager.CreateAsync(student);
+            await roleManager.CreateAsync(teacher);
+        }
+
+        // om det inte finns någoting i min userManager då vill jag kunna skapa användare
+        if (!userManager.Users.Any())
+        {
+            var admin = new UserModel
+            {
+                UserName = "sunanda.carlstrom@gmail.com",
+                Email = "sunanda.carlstrom@gmail.com",
+                FirstName = "Sunanda",
+                LastName = "Carlström"
+            };
+
+            // spara till databasen 
+            await userManager.CreateAsync(admin, "Pa$$w0rd");
+            // placera användaren Sunanda i rollen admin och gör så att hon kommer åt alla roller i systemet  
+            await userManager.AddToRolesAsync(admin, new[] { "Admin", "Student", "Teacher" });
+
+            // skapar en ny användare 
+            var student = new UserModel
+            {
+                UserName = "carola@gmail.com",
+                Email = "carola@gmail.com",
+                FirstName = "Carola",
+                LastName = "Assaf"
+            };
+
+            await userManager.CreateAsync(student, "Pa$$w0rd");
+            await userManager.AddToRoleAsync(student, "Student");
+
+            // skapar ytterligare en användare 
+            var teacher = new UserModel
+            {
+                UserName = "adam@gmail.com",
+                Email = "adam@gmail.com",
+                FirstName = "Adam",
+                LastName = "Fritz"
+            };
+
+            await userManager.CreateAsync(teacher, "Pa$$w0rd");
+            await userManager.AddToRoleAsync(teacher, "Teacher");
+        }
+    }
+
     public static async Task LoadCourseData(WestcoastEducationContext context)
     {
         var options = new JsonSerializerOptions
