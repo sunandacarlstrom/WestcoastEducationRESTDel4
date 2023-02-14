@@ -8,7 +8,7 @@ public class CourseAddViewModel
     public string Teacher { get; set; }
 
     [Required(ErrorMessage = "Kursnummer saknas")]
-    [StringLength(12)]
+    [StringLength(12, MinimumLength = 3)]
     public string Number { get; set; }
 
     [Required(ErrorMessage = "Kursnamn saknas")]
