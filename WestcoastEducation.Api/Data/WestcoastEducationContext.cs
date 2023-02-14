@@ -1,8 +1,9 @@
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using WestcoastEducation.Api.Models;
 
 namespace WestcoastEducation.Api.Data;
-public class WestcoastEducationContext : DbContext
+public class WestcoastEducationContext : IdentityDbContext<UserModel>
 {
     public DbSet<CourseModel> Courses { get; set; }
     public DbSet<StudentModel> Students { get; set; }
