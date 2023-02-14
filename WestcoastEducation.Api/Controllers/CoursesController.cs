@@ -18,6 +18,9 @@ namespace WestcoastEducationRESTDel1.api.Controllers
             _context = context;
         }
 
+        /// <summary>
+        /// Listar alla kurser i systemet
+        /// </summary> 
         [HttpGet("listall")]
         //endast tillgänglig för användare med rollen Teacher
         [Authorize(Roles = "Teacher, Admin")]
@@ -43,7 +46,16 @@ namespace WestcoastEducationRESTDel1.api.Controllers
             return Ok(result);
         }
 
+        /// <summary>
+        /// Hämtar en kurs baserat på kurs-ID 
+        /// </summary> 
+        /// <param name="id">Kurs-ID</param> 
+        /// <returns>
+        /// Kursinformation om sökt kurs och dess lärare samt studenter
+        /// </returns> 
+        /// <response code="200">Retunerar kursinformation om sökt kurs och dess lärare samt studenter</response> 
         [HttpGet("getbyid/{id}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
         public async Task<ActionResult> GetById(int id)
         {
             var result = await _context.Courses
