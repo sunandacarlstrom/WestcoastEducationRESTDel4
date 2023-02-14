@@ -14,7 +14,6 @@ builder.Services.AddDbContext<WestcoastEducationContext>(options =>
     options.UseSqlite(builder.Configuration.GetConnectionString("sqlite"));
 });
 
-
 // Setup Identity...
 builder.Services.AddIdentityCore<UserModel>()
 .AddRoles<IdentityRole>()
