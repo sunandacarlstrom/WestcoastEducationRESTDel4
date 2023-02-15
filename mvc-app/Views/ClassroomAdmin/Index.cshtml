@@ -40,7 +40,9 @@
 
                         <td>@classroom.Id</td>
                         <td>@classroom.Number</td>
-                        <td>@classroom.Name</td>
+                        <td>
+                           <a asp-action="details" asp-route-classroomId=@classroom.Id>@classroom.Name</a>
+                        </td>
                         <td>@classroom.Title</td>
                         <td>@classroom.Start.ToString("yyyy-MM-dd")</td>
                         <td>@classroom.End.ToString("yyyy-MM-dd")</td>

@@ -1,0 +1,52 @@
+@model WestcoastEducation.Web.ViewModels.Classrooms.ClassroomDetailsViewModel
+
+<article class="page">
+    <h1 class="page-title">Mer info om vald utbildning</h1>
+    <ul class="courses-details-container">
+        <li class="course-detail">
+            <label asp-for="Number"></label>
+            <span>@Model.Number</span>
+        </li>
+        <li class="course-detail">
+            <label asp-for="Name"></label>
+            <span>@Model.Name</span>
+        </li>
+        <li class="course-detail">
+            <label asp-for="Title"></label>
+            <span>@Model.Title</span>
+        </li>
+        <li class="course-detail">
+            <label asp-for="Teacher"></label>
+            <span>@Model.Teacher</span>
+        </li>
+    </ul>
+
+    <ul class="courses-details-container">
+        <li class="course-detail">
+            <label asp-for="Content"></label>
+        </li>
+        <li class="course-detail">
+            <ul>
+                @foreach (string content in Model.GetContentList)
+                {
+                    <li>@content</li>
+                }
+            </ul>
+        </li>
+    </ul>
+
+     <ul class="courses-details-container">
+        <li class="course-detail">
+            <label asp-for="Students"></label>
+        </li>
+        <li class="course-detail">
+            <ul>
+                @foreach (var student in Model.Students)
+                {
+                    <li>@student.Name</li>
+                }
+            </ul>
+        </li>
+    </ul>
+
+</article>
