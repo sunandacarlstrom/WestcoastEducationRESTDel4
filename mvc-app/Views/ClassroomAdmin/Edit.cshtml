@@ -1,0 +1,59 @@
+@model WestcoastEducation.Web.ViewModels.Classrooms.ClassroomUpdateViewModel
+@{
+    Layout = "_LayoutAdmin";
+    var startDate = Model.Start.ToString("yyyy-MM-dd");
+    var endDate = Model.End.ToString("yyyy-MM-dd");
+}
+
+<section class="page">
+    <h1 class="page-title">Redigera kurs</h1>
+
+    <form class="shadow" asp-action="edit" asp-controller="ClassroomAdmin" asp-route-classroomId=@Model.Id
+        method="post">
+
+        <div class="form-control">
+            <label asp-for="Number"></label>
+            <input asp-for="Number" />
+            <span class="error" asp-validation-for="Number"></span>
+        </div>
+        <div class="form-control">
+            <label asp-for="Name"></label>
+            <input asp-for="Name" />
+            <span class="error" asp-validation-for="Name"></span>
+        </div>
+        <div class="form-control">
+            <label asp-for="Title"></label>
+            <input asp-for="Title" />
+            <span class="error" asp-validation-for="Title"></span>
+        </div>
+        <div class="form-control">
+            <label asp-for="Content"></label>
+            <input asp-for="Content" />
+            <span class="error" asp-validation-for="Content"></span>
+        </div>
+        <div class="form-control">
+            <label asp-for="Start"></label>
+            <input asp-for="Start" type="date" value="@startDate" />
+            <span class="error" asp-validation-for="Start"></span>
+        </div>
+        <div class="form-control">
+            <label asp-for="End"></label>
+            <input asp-for="End" type="date" value="@endDate" />
+            <span class="error" asp-validation-for="End"></span>
+        </div>
+
+        <div class="form-control">
+            <div class="buttons-container">
+                <button type="Submit" class="btn-submit">
+                    <i class="fa-sharp fa-solid fa-floppy-disk"></i>
+                    Spara
+                </button>
+                <a asp-action="Index" asp-controller="ClassroomAdmin" class="btn-cancel">
+                    <i class="fa-solid fa-arrow-left"></i>
+                    Avbryt
+                </a>
+            </div>
+        </div>
+
+    </form>
+</section>

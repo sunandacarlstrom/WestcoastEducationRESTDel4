@@ -1,0 +1,47 @@
+.background-image {
+    height: 100vh;
+    width: 100vw;
+    background: url("img/landing-page-WE.jpg") no-repeat center center/cover;
+    position: absolute;
+    opacity: 0.6;
+    left: 0px;
+    top: 0px;
+    z-index: -1;
+}
+
+.landing {
+    display: flex;
+    height: 82vh;
+}
+
+.landing .content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 0 8rem;
+    height: 82vh;
+    width: 100vw;
+    gap: 2vh;
+}
+
+.landing .content h1 {
+    color: var(--light-color);
+    font-size: 3rem;
+    font-weight: 600;
+}
+
+.landing .content-text {
+    width: 32rem;
+    background-color: var(--primary-transparancy-color);
+    border-radius: 8px;
+    border: 2px solid var(--primary-color);
+    margin: 20px;
+}
+
+.landing .content p {
+    font-size: 20px;
+    line-height: 1.6;
+    margin: 1rem;
+}

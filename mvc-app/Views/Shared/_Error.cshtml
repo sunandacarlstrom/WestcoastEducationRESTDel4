@@ -1,0 +1,13 @@
+@model WestcoastEducation.Web.Models.ErrorModel
+
+@{
+    Layout = "_LayoutAdmin";
+}
+
+<section class="page">
+    <p class="error-icon">
+        <i class="fa-solid fa-triangle-exclamation fa-6x"></i>
+    </p>
+    <h1 class="error-page-title">@Model.ErrorTitle</h1>
+    <p class="text-secondary">@Model.ErrorMessage</p>
+</section>

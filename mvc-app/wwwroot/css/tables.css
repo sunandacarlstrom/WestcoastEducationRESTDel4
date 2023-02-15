@@ -1,0 +1,44 @@
+table {
+    border-collapse: collapse;
+    background: #96c3ce;
+    border: 2px solid black;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.6);
+    width: max-content;
+}
+
+thead {
+    background-color: var(--primary-color);
+    color: white;
+}
+
+tfoot {
+    background-color: var(--primary-color);
+    color: white;
+}
+th,
+td {
+    padding: 0.5rem 2rem;
+    text-align: left;
+    border: 2px dotted var(--light-color);
+    max-width: 15rem;
+    text-align: center;
+}
+
+tbody > tr:hover {
+    background: var(--primary-border-color);
+}
+
+.table-container {
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+    margin-top: 10px;
+    width: 800px;
+}
+
+.edit-icon {
+    color: var(--icon-secondary-color);
+}
+.delete-icon {
+    color: var(--icon-color);
+}

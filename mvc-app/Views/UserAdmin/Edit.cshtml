@@ -1,0 +1,77 @@
+@model WestcoastEducation.Web.ViewModels.Users.UserUpdateViewModel
+
+@{
+    Layout = "_LayoutAdmin";
+}
+
+<section class="page">
+    <h1 class="page-title">Redigera användare</h1>
+
+    <form class="shadow" asp-action="edit" asp-controller="UserAdmin" asp-route-userId=@Model.UserId method="post">
+
+        <div class="form-control">
+            <label asp-for="UserName"></label>
+            <input asp-for="UserName" />
+            <span class="error" asp-validation-for="UserName"></span>
+        </div>
+        <div class="form-control">
+            <label asp-for="Password"></label>
+            <input disabled asp-for="Password" />
+            <span class="error" asp-validation-for="Password"></span>
+        </div>
+        <div class="form-control">
+            <label asp-for="FirstName"></label>
+            <input asp-for="FirstName" />
+            <span class="error" asp-validation-for="FirstName"></span>
+        </div>
+        <div class="form-control">
+            <label asp-for="LastName"></label>
+            <input asp-for="LastName" />
+            <span class="error" asp-validation-for="LastName"></span>
+        </div>
+        <div class="form-control">
+            <label asp-for="Email"></label>
+            <input asp-for="Email" />
+            <span class="error" asp-validation-for="Email"></span>
+        </div>
+        <div class="form-control">
+            <label asp-for="SocialSecurityNumber"></label>
+            <input asp-for="SocialSecurityNumber" />
+            <span class="error" asp-validation-for="SocialSecurityNumber"></span>
+        </div>
+        <div class="form-control">
+            <label asp-for="StreetAddress"></label>
+            <input asp-for="StreetAddress" />
+            <span class="error" asp-validation-for="StreetAddress"></span>
+        </div>
+        <div class="form-control">
+            <label asp-for="PostalCode"></label>
+            <input asp-for="PostalCode" />
+            <span class="error" asp-validation-for="PostalCode"></span>
+        </div>
+        <div class="form-control">
+            <label asp-for="Phone"></label>
+            <input asp-for="Phone" />
+            <span class="error" asp-validation-for="Phone"></span>
+        </div>
+        <div class="form-control">
+            <label asp-for="IsATeacher"></label>
+            <input asp-for="IsATeacher" type="checkbox" />
+            <span class="error" asp-validation-for="IsATeacher"></span>
+        </div>
+
+        <div class="form-control">
+            <div class="buttons-container">
+                <button type="Submit" class="btn-submit">
+                    <i class="fa-sharp fa-solid fa-floppy-disk"></i>
+                    Spara
+                </button>
+                <a asp-action="Index" asp-controller="ClassroomAdmin" class="btn-cancel">
+                    <i class="fa-solid fa-arrow-left"></i>
+                    Avbryt
+                </a>
+            </div>
+        </div>
+
+    </form>
+</section>

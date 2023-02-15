@@ -1,0 +1,224 @@
+@import url("https://fonts.googleapis.com/css2?family=Roboto+Mono:ital,wght@0,200;0,300;0,400;0,500;0,600;0,700;1,200;1,300;1,400;1,500;1,600&display=swap");
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: "Roboto Mono", monospace;
+    background: var(--primary-background-color);
+}
+
+h1 {
+    font-weight: 1200;
+}
+
+h2 {
+    font-weight: 400;
+}
+
+a {
+    text-decoration: none;
+}
+
+ul {
+    list-style: none;
+}
+
+.course-detail ul {
+    list-style: square;
+}
+
+button {
+    background-color: var(--light-color);
+    padding: 0.4rem;
+    border-radius: 1px;
+    box-shadow: 2px 2px 4px var(--dark-color);
+    border: 2px solid var(--primary-border-color);
+    margin-top: 10px;
+    cursor: pointer;
+}
+
+.btn-submit:hover {
+    background-color: var(--icon-secondary-color);
+}
+
+.btn-cancel {
+    background-color: var(--light-color);
+    padding: 0.4rem;
+    border-radius: 1px;
+    box-shadow: 2px 2px 4px var(--dark-color);
+    border: 2px solid var(--primary-border-color);
+    margin-top: 10px;
+    font-size: 0.8em;
+    font-weight: 500;
+    color: black;
+}
+
+.btn-cancel:hover {
+    background-color: var(--icon-color);
+}
+
+button a:active {
+    color: var(--secondary-color);
+}
+
+button:hover {
+    background-color: var(--primary-color);
+}
+
+button a {
+    color: black;
+}
+
+.btn-front-page {
+    background-color: var(--dark-color);
+    color: var(--light-color);
+    padding: 0.6rem;
+    border-radius: 4px;
+    box-shadow: 8px 5px 10px var(--dark-color);
+    border: 2px solid var(--primary-border-color);
+}
+
+.btn-front-page:active {
+    color: var(--secondary-color);
+}
+
+.btn-front-page a {
+    text-decoration: none;
+    color: var(--light-color);
+}
+.content-container a {
+    color: var(--dark-color);
+    text-decoration: underline;
+    font-weight: 800;
+}
+
+.content-container a:active {
+    color: var(--secondary-color);
+}
+
+.page-content {
+    display: flex;
+    flex-direction: column;
+}
+
+.content-section {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+    gap: 0.5rem;
+    margin-top: 3rem;
+}
+
+.content-container {
+    width: 40rem;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    border: solid 2px var(--primary-color);
+    background-color: var(--secondary-color);
+    padding: 12px;
+}
+
+.content-container div {
+    display: flex;
+    justify-content: space-between;
+}
+
+.content-container div:hover {
+    background-color: var(--light-color);
+}
+
+.content-container a {
+    color: var(--primary-text-color);
+}
+
+.content-container div a:nth-child(1) {
+    color: var(--icon-secondary-color);
+}
+
+.content-container div a:nth-child(3) {
+    color: var(--icon-color);
+}
+
+.logo-text {
+    color: var(--primary-color);
+}
+
+.page {
+    padding: 6rem;
+}
+
+.page-title {
+    display: flex;
+    color: var(--primary-color);
+    font-weight: 800;
+    font-size: 2rem;
+    padding-bottom: 0.5rem;
+}
+
+.offer-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: var(--primary-border-color);
+    height: 8vh;
+    width: 100vw;
+    color: var(--dark-color);
+}
+
+.offer {
+    padding: 14px;
+    height: 8vh;
+}
+
+.form-control {
+    display: flex;
+    justify-content: space-between;
+    gap: 2rem;
+}
+
+.form-control > * {
+    width: 33%;
+}
+
+.shadow {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    width: 80vw;
+    min-width: 30rem;
+    max-width: 60rem;
+}
+
+.user-type {
+    margin-top: 1.5rem;
+    margin-bottom: 0.5rem;
+}
+
+.error {
+    font-size: smaller;
+    color: var(--error-text);
+    font-style: italic;
+}
+
+.courses-details-container {
+    display: flex;
+    flex-direction: column;
+    width: 30rem;
+    gap: 10px;
+    margin-bottom: 3rem;
+}
+
+.course-detail {
+    display: flex;
+    justify-content: space-between;
+}
+
+.course-detail > * {
+    flex: 1;
+}

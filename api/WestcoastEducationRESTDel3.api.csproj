@@ -4,6 +4,7 @@
     <TargetFramework>net7.0</TargetFramework>
     <Nullable>disable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
+    <RootNamespace>WestcoastEducationRESTDel1.api</RootNamespace>
   </PropertyGroup>
 
   <PropertyGroup>

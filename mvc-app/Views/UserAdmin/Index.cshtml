@@ -1,0 +1,66 @@
+@model IList<WestcoastEducation.Web.ViewModels.Users.UserListViewModel>
+
+@{
+    ViewBag.PageTitle = "Handle User Accounts";
+    Layout = "_LayoutAdmin";
+}
+
+<article class="page-content">
+    <section class="content-section">
+        <h2 class="page-title">Användare</h2>
+    </section>
+    <section class="content-section">
+        <h3 class="page-title">Lärare</h3>
+        <div>
+            <button>
+                <a asp-action="create" asp-controller="UserAdmin" asp-route-isATeacher=true> Lägg till lärare</a>
+            </button>
+        </div>
+        <div class="content-container">
+            @foreach (var user in Model)
+            {
+                if (user.IsATeacher == true)
+                {
+                    <div>
+                        <a class="edit-icon" asp-action="Edit" asp-controller="UserAdmin" asp-route-userId=@user.UserId>
+                            <i class="fa-regular fa-pen-to-square"></i>
+                        </a>
+
+                        <a asp-action="details" asp-route-userId=@user.UserId>@user.CompleteName - @user.Email - @user.Phone</a>
+
+                        <a class="delete-icon" asp-action="Delete" asp-controller="UserAdmin" asp-route-userId=@user.UserId>
+                            <i class="fa-solid fa-trash-can"></i>
+                        </a>
+                    </div>
+                }
+            }
+        </div>
+    </section>
+    <section class="content-section">
+        <h3 class="page-title">Studenter</h3>
+        <div>
+            <button>
+                <a asp-action="create" asp-controller="UserAdmin" asp-route-isATeacher=false> Lägg till student</a>
+            </button>
+        </div>
+        <div class="content-container">
+            @foreach (var user in Model)
+            {
+                if (user.IsATeacher == false)
+                {
+                    <div>
+                        <a class="edit-icon" asp-action="Edit" asp-controller="UserAdmin" asp-route-userId=@user.UserId>
+                            <i class="fa-regular fa-pen-to-square"></i>
+                        </a>
+
+                        <a asp-action="details" asp-route-userId=@user.UserId>@user.CompleteName - @user.Email - @user.Phone</a>
+
+                        <a class="delete-icon" asp-action="Delete" asp-controller="UserAdmin" asp-route-userId=@user.UserId>
+                            <i class="fa-solid fa-trash-can"></i>
+                        </a>
+                    </div>
+                }
+            }
+        </div>
+    </section>
+</article>
