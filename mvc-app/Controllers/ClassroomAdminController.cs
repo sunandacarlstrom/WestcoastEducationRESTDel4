@@ -1,5 +1,6 @@
 using System.Text.Json;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using WestcoastEducation.Web.Interfaces;
 using WestcoastEducation.Web.Models;
 using WestcoastEducation.Web.ViewModels.Classrooms;
@@ -26,7 +27,7 @@ public class ClassroomAdminController : Controller
         // skapa en instans av http klienten 
         using var client = _httpClient.CreateClient();
 
-        //hämta datat ifrån api'et 
+        // hämta datat ifrån api'et 
         var response = await client.GetAsync($"{_baseUrl}/courses/listall");
         //TODO: skicka istälelt en Error-sida om tid finns... 
         // kontrollerar om inte responsen är lyckad så retuneras ett felmeddelande
@@ -55,6 +56,26 @@ public class ClassroomAdminController : Controller
         var classroom = JsonSerializer.Deserialize<ClassroomDetailsViewModel>(json, _options);
 
         return View("Details", classroom);
+    }
+
+    [HttpPost("create")]
+    public async Task<IActionResult> Create()
+    {
+        // en lista av typen Teachers 
+        var teachersList = new List<SelectListItem>();
+
+        // hämta datat ifrån api'et 
+        using var client = _httpClient.CreateClient(); 
+        var response = await client.GetAsync($"{_baseUrl}/teachers/listall"); 
+        if(!response.IsSuccessStatusCode) return Content("Hoppsan det gick inget vidare!!!"); 
+        var json = await response.Content.ReadAsStringAsync(); 
+        var teachers = JsonSerializer.Deserialize<List<CourseSettings>>(json, _options); 
+
+        // skapar en ny vymodell
+        var classroom = new ClassroomPostViewModel();
+        classroom.Teachers = teachersList; 
+
+        return View("Create", classroom);
     }
 }
 

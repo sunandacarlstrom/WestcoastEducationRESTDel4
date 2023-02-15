@@ -22,6 +22,11 @@
             <span class="error" asp-validation-for="Name"></span>
         </div>
         <div class="form-control">
+            <label asp-for="Teacher"></label>
+            <select asp-for="Teacher" asp-items="Model.Teachers"></select>
+            <span class="error" asp-validation-for="Teacher"></span>
+        </div>
+        <div class="form-control">
             <label asp-for="Title"></label>
             <input asp-for="Title" />
             <span class="error" asp-validation-for="Title"></span>

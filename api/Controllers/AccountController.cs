@@ -5,6 +5,7 @@ using WestcoastEducation.Api.Services;
 using WestcoastEducation.Api.ViewModels.Account;
 
 namespace WestcoastEducation.Api.Controllers;
+
 [ApiController]
 [Route("api/v1/account")]
 public class AccountController : ControllerBase

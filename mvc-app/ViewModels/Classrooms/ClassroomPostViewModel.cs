@@ -1,5 +1,6 @@
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
+using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace WestcoastEducation.Web.ViewModels.Classrooms;
 
@@ -13,6 +14,10 @@ public class ClassroomPostViewModel
     [Required(ErrorMessage = "Kursnamn är obligatoriskt")]
     [DisplayName("Kursnamn")]
     public string Name { get; set; } = "";
+
+    [Required(ErrorMessage = "Lärare är obligatoriskt")]
+    [DisplayName("Lärare")]
+    public string Teacher { get; set; }
 
     [Required(ErrorMessage = "Kurstitel är obligatoriskt")]
     [DisplayName("Kurstitel")]
@@ -30,9 +35,8 @@ public class ClassroomPostViewModel
     [DisplayName("Slutdatum")]
     public DateTime End { get; set; }
 
-    [DisplayName("Kurslängd")]
-    public TimeSpan Length { get => End - Start; }
-
     [DisplayName("Är kursen på distans?")]
     public bool IsOnDistance { get; set; }
+
+    public List<SelectListItem> Teachers { get; set; }
 }
