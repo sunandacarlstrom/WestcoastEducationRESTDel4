@@ -46,5 +46,6 @@ public class ClassroomDetailsViewModel
         }
     }
 
+    [DisplayName("Studenter")]
     public ICollection<StudentListViewModel> Students { get; set; }
 }
