@@ -1,9 +1,10 @@
+using System.Text;
 using System.Text.Json;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
-using WestcoastEducation.Web.Interfaces;
 using WestcoastEducation.Web.Models;
 using WestcoastEducation.Web.ViewModels.Classrooms;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace WestcoastEducation.Web.Controllers;
 
@@ -58,27 +59,66 @@ public class ClassroomAdminController : Controller
         return View("Details", classroom);
     }
 
-    [HttpPost("create")]
+    [HttpGet("create")]
     public async Task<IActionResult> Create()
     {
         // en lista av typen Teachers 
         var teachersList = new List<SelectListItem>();
 
         // hämta datat ifrån api'et 
-        using var client = _httpClient.CreateClient(); 
-        var response = await client.GetAsync($"{_baseUrl}/teachers/listall"); 
-        if(!response.IsSuccessStatusCode) return Content("Hoppsan det gick inget vidare!!!"); 
-        var json = await response.Content.ReadAsStringAsync(); 
-        var teachers = JsonSerializer.Deserialize<List<CourseSettings>>(json, _options); 
+        using var client = _httpClient.CreateClient();
+        var response = await client.GetAsync($"{_baseUrl}/teachers/listall");
+        if (!response.IsSuccessStatusCode) return Content("Hoppsan det gick inget vidare!!!");
+        var json = await response.Content.ReadAsStringAsync();
+        var teachers = JsonSerializer.Deserialize<List<CourseSettings>>(json, _options);
 
-        // skapar en ny vymodell
+        foreach (var teacher in teachers)
+        {
+            teachersList.Add(new SelectListItem { Value = teacher.Name, Text = teacher.Name });
+        }
+
+        // skapar en ny vymodell för att användaren ska kunna fylla i formuläret
         var classroom = new ClassroomPostViewModel();
-        classroom.Teachers = teachersList; 
+        classroom.Teachers = teachersList;
 
         return View("Create", classroom);
     }
-}
 
+    [HttpPost("create")]
+    public async Task<IActionResult> Create(ClassroomPostViewModel classroom)
+    {
+        // kontrollerar att allt är korrekt utifrån det som har matats in av användaren efter att ha tryckt på knappen 'Spara'
+        if (!ModelState.IsValid) return View("Create", classroom);
+
+        // Om allt går bra... 
+        // skapas ett nytt objekt, här är det som ska till api'et (just nu manuellt, men man kan också skicka en ny vymodell)
+        var model = new
+        {
+            Number = classroom.Number,
+            Name = classroom.Name,
+            Teacher = classroom.Teacher,
+            Title = classroom.Title,
+            Content = "Test",
+            Start = classroom.Start,
+            End = classroom.End,
+            IsOnDistance = classroom.IsOnDistance
+        };
+
+        // skapar en ny klient 
+        using var client = _httpClient.CreateClient();
+        // istället för att läsa in data så skickas datat till api'et genom att skapa innehållet i form av ett JSON-paket 
+        var body = new StringContent(JsonSerializer.Serialize(model), Encoding.UTF8, Application.Json);
+        // skickar över JSON-paketet till rätt endpoint i api'et 
+        var response = await client.PostAsync($"{_baseUrl}/courses", body);
+        // kontrollerar att allting går bra... 
+        if (response.IsSuccessStatusCode)
+        {
+            return RedirectToAction(nameof(Index));
+        }
+
+        return Content("Det gick fel! Bättre lycka nästa gång");
+    }
+}
 
 #region old
 /*

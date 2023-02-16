@@ -4,7 +4,6 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace WestcoastEducation.Web.ViewModels.Classrooms;
 
-
 public class ClassroomPostViewModel
 {
     [Required(ErrorMessage = "Kursnummer är obligatoriskt")]

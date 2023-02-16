@@ -1,8 +1,3 @@
-using Microsoft.EntityFrameworkCore;
-using WestcoastEducation.Web.Data;
-using WestcoastEducation.Web.Interfaces;
-using WestcoastEducation.Web.Repository;
-
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.

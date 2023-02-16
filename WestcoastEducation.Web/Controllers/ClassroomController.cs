@@ -1,7 +1,5 @@
 using System.Text.Json;
 using Microsoft.AspNetCore.Mvc;
-using WestcoastEducation.Web.Interfaces;
-using WestcoastEducation.Web.Models;
 using WestcoastEducation.Web.ViewModels.Classrooms;
 
 namespace WestcoastEducation.Web.Controllers;

@@ -1,4 +1,5 @@
 using System.ComponentModel;
+using WestcoastEducation.Web.ViewModels.Users;
 
 namespace WestcoastEducation.Web.ViewModels.Classrooms;
 
@@ -47,5 +48,5 @@ public class ClassroomDetailsViewModel
     }
 
     [DisplayName("Studenter")]
-    public ICollection<StudentListViewModel> Students { get; set; }
+    public ICollection<UserListViewModel> Students { get; set; }
 }
