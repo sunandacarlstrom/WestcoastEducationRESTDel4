@@ -25,6 +25,7 @@ public class TeachersController : ControllerBase
         {
             Id = t.Id,
             Name = t.Name,
+            Email = t.Email
         })
         // listar alla lärare
         .ToListAsync();
