@@ -72,7 +72,7 @@ public class ClassroomAdminController : Controller
         using var client = _httpClient.CreateClient();
         var response = await client.GetAsync($"{_baseUrl}/teachers/listall");
         if (!response.IsSuccessStatusCode) return Content("Hoppsan det gick inget vidare!!!");
-        
+
         var json = await response.Content.ReadAsStringAsync();
         var teachers = JsonSerializer.Deserialize<List<CourseSettings>>(json, _options);
 
@@ -96,7 +96,7 @@ public class ClassroomAdminController : Controller
 
         // Om allt går bra... 
         // skapas ett nytt objekt, här är det som ska till api'et (just nu manuellt, men man kan också skicka en ny vymodell)
-        var model = new
+        var model = new ClassroomDetailsViewModel
         {
             Number = classroom.Number,
             Name = classroom.Name,
@@ -104,8 +104,7 @@ public class ClassroomAdminController : Controller
             Title = classroom.Title,
             Content = classroom.Content,
             Start = classroom.Start,
-            End = classroom.End,
-            IsOnDistance = classroom.IsOnDistance
+            End = classroom.End
         };
 
         // skapar en ny klient 

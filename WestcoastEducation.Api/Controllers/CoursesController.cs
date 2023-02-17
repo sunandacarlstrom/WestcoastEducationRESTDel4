@@ -39,7 +39,9 @@ public class CoursesController : ControllerBase
             Teacher = c.Teacher.Name ?? "",
             Number = c.Number,
             Name = c.Name,
-            Title = c.Title
+            Title = c.Title,
+            Start = c.Start,
+            End = c.End
         })
         // listar alla kurser
         .ToListAsync();
