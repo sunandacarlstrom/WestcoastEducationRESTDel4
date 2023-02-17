@@ -1,8 +1,8 @@
-@model WestcoastEducation.Web.ViewModels.Users.UserListViewModel
+@model WestcoastEducation.Web.ViewModels.Users.StudentDetailsViewModel
 
 @{
     Layout = "_LayoutAdmin";
-    string userType = Model.IsATeacher ? "Lärare" : "Student";
+    string userType = "Student";
 }
 
 <article class="page">
@@ -12,5 +12,9 @@
         <li><b>ID: @Model.Id</b></li>
         <li>Namn: @Model.Name</li>
         <li>E-Post: @Model.Email</li>
+        <li>
+            <h4>Antagen på följande kurs: </h4>
+            @Model.Course
+        </li>
     </ul>
 </article>

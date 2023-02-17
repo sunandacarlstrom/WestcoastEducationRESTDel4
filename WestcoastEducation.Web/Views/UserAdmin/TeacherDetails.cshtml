@@ -1,0 +1,32 @@
+@model WestcoastEducation.Web.ViewModels.Users.TeacherDetailsViewModel
+
+@{
+    Layout = "_LayoutAdmin";
+    string userType = "Lärare";
+}
+
+<article class="page">
+    <h1 class="page-title">Mer info</h1>
+    <h3 class="user-type">@userType</h3>
+    <ul>
+        <li class="user-details">
+            <h4>ID: @Model.Id</h4>
+            <div>Namn: @Model.Name</div>
+            <div>E-Post: @Model.Email</div>
+        </li>
+        <li class="user-details">
+            <h4>Kompetensområde</h4>
+            @foreach(var skill in Model.Skills)
+            {
+                <div>@skill.Skill</div>
+            }
+        </li>
+        <li class="user-details">
+            <h4>Undervisar i följande kurser: </h4> 
+            @foreach(var course in Model.Courses)
+            {
+               <div>@course.Name</div>
+            }
+        </li>
+    </ul>
+</article>

@@ -98,7 +98,7 @@ public class ClassroomAdminController : Controller
             Name = classroom.Name,
             Teacher = classroom.Teacher,
             Title = classroom.Title,
-            Content = "Test",
+            Content = classroom.Content,
             Start = classroom.Start,
             End = classroom.End,
             IsOnDistance = classroom.IsOnDistance

@@ -112,6 +112,7 @@ button a {
     align-items: center;
     gap: 0.5rem;
     margin-top: 3rem;
+    margin-bottom: 3rem;
 }
 
 .content-container {
@@ -198,6 +199,10 @@ button a {
 .user-type {
     margin-top: 1.5rem;
     margin-bottom: 0.5rem;
+}
+
+.user-details {
+    margin-bottom: 10px;
 }
 
 .error {

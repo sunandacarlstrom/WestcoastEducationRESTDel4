@@ -1,5 +1,10 @@
 @model WestcoastEducation.Web.ViewModels.Classrooms.ClassroomDetailsViewModel
 
+@{
+    ViewBag.PageTitle = @Model.Name;
+    Layout = "_LayoutAdmin";
+}
+
 <article class="page">
     <h1 class="page-title">Mer info om vald utbildning</h1>
     <ul class="courses-details-container">
