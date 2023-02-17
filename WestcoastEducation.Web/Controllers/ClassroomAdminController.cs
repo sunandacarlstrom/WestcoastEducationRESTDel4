@@ -72,6 +72,7 @@ public class ClassroomAdminController : Controller
         using var client = _httpClient.CreateClient();
         var response = await client.GetAsync($"{_baseUrl}/teachers/listall");
         if (!response.IsSuccessStatusCode) return Content("Hoppsan det gick inget vidare!!!");
+        
         var json = await response.Content.ReadAsStringAsync();
         var teachers = JsonSerializer.Deserialize<List<CourseSettings>>(json, _options);
 

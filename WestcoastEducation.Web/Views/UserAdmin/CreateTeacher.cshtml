@@ -1,0 +1,47 @@
+@model WestcoastEducation.Web.ViewModels.Users.TeacherPostViewModel
+
+@{
+    Layout = "_LayoutAdmin";
+}
+
+<section class="page">
+    <h1 class="page-title">Lägg till användare</h1>
+
+    <form class="shadow" asp-action="create" asp-controller="UserAdmin" method="post">
+
+        <div class="form-control">
+            <label asp-for="Name"></label>
+            <input asp-for="Name" />
+            <span class="error" asp-validation-for="Name"></span>
+        </div>
+        <div class="form-control">
+            <label asp-for="Email"></label>
+            <input asp-for="Email" />
+            <span class="error" asp-validation-for="Email"></span>
+        </div>
+        <div class="form-control">
+            <label asp-for="SkillsList"></label>
+            <select asp-for="SkillsList" asp-items="Model.Skills" multiple></select>
+            <span class="error" asp-validation-for="SkillsList"></span>
+        </div>
+        <div class="form-control">
+            <label asp-for="CoursesList"></label>
+            <select asp-for="CoursesList" asp-items="Model.Courses" multiple></select>
+            <span class="error" asp-validation-for="CoursesList"></span>
+        </div>
+
+        <div class="form-control">
+            <div class="buttons-container">
+                <button type="Submit" class="btn-submit">
+                    <i class="fa-sharp fa-solid fa-floppy-disk"></i>
+                    Spara
+                </button>
+                <a asp-action="Index" asp-controller="UserAdmin" class="btn-cancel">
+                    <i class="fa-solid fa-arrow-left"></i>
+                    Avbryt
+                </a>
+            </div>
+        </div>
+
+    </form>
+</section>

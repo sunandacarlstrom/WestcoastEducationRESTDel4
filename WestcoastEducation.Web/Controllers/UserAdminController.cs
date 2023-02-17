@@ -1,7 +1,10 @@
+using System.Text;
 using System.Text.Json;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using WestcoastEducation.Web.Models;
 using WestcoastEducation.Web.ViewModels.Users;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace WestcoastEducation.Web.Controllers;
 
@@ -53,7 +56,7 @@ public class UserAdminController : Controller
         // ändra alla Teachers till true enligt min UserListViewModel
         teacherList.ForEach(t => t.IsATeacher = true);
 
-        //slå ihop studentList och teacherList
+        // slå ihop studentList och teacherList
         var userList = new List<UserListViewModel>();
         userList.AddRange(studentList);
         userList.AddRange(teacherList);
@@ -76,7 +79,6 @@ public class UserAdminController : Controller
         return View("TeacherDetails", teacher);
     }
 
-
     [HttpGet("StudentDetails/{userId}")]
     public async Task<IActionResult> StudentDetails(int userId)
     {
@@ -92,64 +94,74 @@ public class UserAdminController : Controller
         return View("StudentDetails", student);
     }
 
-    // [HttpGet("create")]
-    // public async Task<IActionResult> Create()
-    // {
-    //     // en lista av typen Teachers 
-    //     var skillsList= new List<SelectListItem>();
+    [HttpGet("CreateTeacher")]
+    public async Task<IActionResult> CreateTeacher()
+    {
+        // en lista av typen TeacherSkills
+        var skillsList = new List<SelectListItem>();
+        var coursesList = new List<SelectListItem>();
 
-    //     // hämta datat ifrån api'et 
-    //     using var client = _httpClient.CreateClient();
-    //     var response = await client.GetAsync($"{_baseUrl}/teachers");
-    //     if (!response.IsSuccessStatusCode) return Content("Hoppsan det gick inget vidare!!!");
+        // hämta datat ifrån api'et 
+        using var client = _httpClient.CreateClient();
 
-    //     var json = await response.Content.ReadAsStringAsync();
-    //     var skills = JsonSerializer.Deserialize<List<SkillsSettings>>(json, _options);
+        var responseSkills = await client.GetAsync($"{_baseUrl}/teacherskills/listall");
+        if (!responseSkills.IsSuccessStatusCode) return Content("Hoppsan det gick inget vidare!!!");
 
-    //     foreach (var skill in skills)
-    //     {
-    //         skillsList.Add(new SelectListItem { Value = skill.Skill, Text = teacher.Skill });
-    //     }
+        var jsonSkills = await responseSkills.Content.ReadAsStringAsync();
+        var skills = JsonSerializer.Deserialize<List<SkillsSettings>>(jsonSkills, _options);
 
-    //     // skapar en ny vymodell för att användaren ska kunna fylla i formuläret
-    //     var teacher = new TeacherPostViewModel();
-    //     teacher.Skill = skillsList;
+        foreach (var skill in skills)
+        {
+            skillsList.Add(new SelectListItem { Value = skill.Id.ToString(), Text = skill.Skill });
+        }
 
-    //     return View("Create", teacher);
-    // }
+        var responseCourses = await client.GetAsync($"{_baseUrl}/courses/listall");
+        if (!responseCourses.IsSuccessStatusCode) return Content("Hoppsan det gick inget vidare!!!");
 
-    // [HttpPost("create")]
-    // public async Task<IActionResult> Create(ClassroomPostViewModel classroom)
-    // {
-    //     // kontrollerar att allt är korrekt utifrån det som har matats in av användaren efter att ha tryckt på knappen 'Spara'
-    //     if (!ModelState.IsValid) return View("Create", classroom);
+        var jsonCourses = await responseCourses.Content.ReadAsStringAsync();
+        var courses = JsonSerializer.Deserialize<List<CourseSettings>>(jsonCourses, _options);
 
-    //     // Om allt går bra... 
-    //     // skapas ett nytt objekt, här är det som ska till api'et (just nu manuellt, men man kan också skicka en ny vymodell)
-    //     var model = new
-    //     {
-    //         Number = classroom.Number,
-    //         Name = classroom.Name,
-    //         Teacher = classroom.Teacher,
-    //         Title = classroom.Title,
-    //         Content = "Test",
-    //         Start = classroom.Start,
-    //         End = classroom.End,
-    //         IsOnDistance = classroom.IsOnDistance
-    //     };
+        foreach (var course in courses)
+        {
+            coursesList.Add(new SelectListItem { Value = course.Id.ToString(), Text = course.Name });
+        }
 
-    //     // skapar en ny klient 
-    //     using var client = _httpClient.CreateClient();
-    //     // istället för att läsa in data så skickas datat till api'et genom att skapa innehållet i form av ett JSON-paket 
-    //     var body = new StringContent(JsonSerializer.Serialize(model), Encoding.UTF8, Application.Json);
-    //     // skickar över JSON-paketet till rätt endpoint i api'et 
-    //     var response = await client.PostAsync($"{_baseUrl}/courses", body);
-    //     // kontrollerar att allting går bra... 
-    //     if (response.IsSuccessStatusCode)
-    //     {
-    //         return RedirectToAction(nameof(Index));
-    //     }
+        // skapar en ny vymodell för att användaren ska kunna fylla i formuläret
+        var teacher = new TeacherPostViewModel();
+        teacher.Skills = skillsList;
+        teacher.Courses = coursesList;
 
-    //     return Content("Det gick fel! Bättre lycka nästa gång");
-    // }
+        return View("CreateTeacher", teacher);
+    }
+
+    [HttpPost("CreateTeacher")]
+    public async Task<IActionResult> Create(TeacherPostViewModel teacher)
+    {
+        // kontrollerar att allt är korrekt utifrån det som har matats in av användaren efter att ha tryckt på knappen 'Spara'
+        if (!ModelState.IsValid) return View("Create", teacher);
+
+        // Om allt går bra... 
+        // skapas ett nytt objekt, här är det som ska till api'et (just nu manuellt, men man kan också skicka en ny vymodell)
+        var model = new
+        {
+            Name = teacher.Name,
+            Email = teacher.Email,
+            TeacherSkillIds = teacher.SkillsList,
+            CourseIds = teacher.CoursesList
+        };
+
+        // skapar en ny klient 
+        using var client = _httpClient.CreateClient();
+        // istället för att läsa in data så skickas datat till api'et genom att skapa innehållet i form av ett JSON-paket 
+        var body = new StringContent(JsonSerializer.Serialize(model), Encoding.UTF8, Application.Json);
+        // skickar över JSON-paketet till rätt endpoint i api'et 
+        var response = await client.PostAsync($"{_baseUrl}/teachers", body);
+        // kontrollerar att allting går bra... 
+        if (response.IsSuccessStatusCode)
+        {
+            return RedirectToAction(nameof(Index));
+        }
+
+        return Content("Det gick fel! Bättre lycka nästa gång");
+    }
 }
