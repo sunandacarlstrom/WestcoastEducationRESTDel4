@@ -1,5 +1,6 @@
 using System.Text.Json;
 using Microsoft.AspNetCore.Mvc;
+using WestcoastEducation.Web.Models;
 using WestcoastEducation.Web.ViewModels.Users;
 
 namespace WestcoastEducation.Web.Controllers;
@@ -26,12 +27,19 @@ public class UserAdminController : Controller
 
         // hämta datat ifrån api'et 
         var responseStudents = await client.GetAsync($"{_baseUrl}/students/listall");
-        //TODO: skicka istälelt en Error-sida om tid finns... 
-        // kontrollerar om inte responsen är lyckad så retuneras ett felmeddelande
-        if (!responseStudents.IsSuccessStatusCode) return Content("Åh nej något gick fel att lista studenter");
+        // ...om inte responsen är lyckad så retuneras ett felmeddelande
+        if (!responseStudents.IsSuccessStatusCode) return View("_Error", new ErrorModel
+        {
+            ErrorTitle = "Det gick fel! Kunde inte hämta studenterna från API:et",
+            ErrorMessage = responseStudents.ToString()
+        });
 
         var responseTeachers = await client.GetAsync($"{_baseUrl}/teachers/listall");
-        if (!responseTeachers.IsSuccessStatusCode) return Content("Åh nej det gick fel att lista lärare");
+        if (!responseTeachers.IsSuccessStatusCode) return View("_Error", new ErrorModel
+        {
+            ErrorTitle = "Det gick fel! Kunde inte hämta lärarna från API:et",
+            ErrorMessage = responseTeachers.ToString()
+        });
 
         // Om allt går bra... 
         // läs ut body (content) från mitt respons-paket 
@@ -94,7 +102,7 @@ public class UserAdminController : Controller
     //     using var client = _httpClient.CreateClient();
     //     var response = await client.GetAsync($"{_baseUrl}/teachers");
     //     if (!response.IsSuccessStatusCode) return Content("Hoppsan det gick inget vidare!!!");
-        
+
     //     var json = await response.Content.ReadAsStringAsync();
     //     var skills = JsonSerializer.Deserialize<List<SkillsSettings>>(json, _options);
 
