@@ -30,9 +30,12 @@ public class ClassroomAdminController : Controller
 
         // hämta datat ifrån api'et 
         var response = await client.GetAsync($"{_baseUrl}/courses/listall");
-        //TODO: skicka istälelt en Error-sida om tid finns... 
         // kontrollerar om inte responsen är lyckad så retuneras ett felmeddelande
-        if (!response.IsSuccessStatusCode) return Content("Åh nej det gick fel");
+        if (!response.IsSuccessStatusCode) return View("_Error", new ErrorModel
+        {
+            ErrorTitle = "Det gick fel! Kunde inte hämta kurserna från API:et",
+            ErrorMessage = response.ToString()
+        });
 
         // Om allt går bra... 
         // läs ut body (content) från mitt respons-paket 
