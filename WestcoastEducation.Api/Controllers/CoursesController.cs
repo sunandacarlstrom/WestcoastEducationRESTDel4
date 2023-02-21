@@ -51,7 +51,7 @@ public class CoursesController : ControllerBase
     /// <summary>
     /// Hämtar en kurs baserat på kurs-ID 
     /// </summary> 
-    /// <param name="id">Kurs-ID</param> 
+    /// <param name="id">Kurs-ID krävs</param> 
     /// <returns>
     /// Kursinformation om sökt kurs och dess lärare samt studenter
     /// </returns> 
@@ -88,6 +88,14 @@ public class CoursesController : ControllerBase
         return Ok(result);
     }
 
+    /// <summary>
+    /// Hämtar en kurs baserat på kursnummer
+    /// </summary> 
+    /// <param name="courseNo">Kursnummer krävs</param> 
+    /// <returns>
+    /// Kursinformation om sökt kurs och dess lärare samt studenter
+    /// </returns> 
+    /// <response code="200">Retunerar kursinformation om sökt kurs och dess lärare samt studenter</response> 
     [HttpGet("getbycourseno/{courseNo}")]
     public async Task<ActionResult> GetByCourseNumber(string courseNo)
     {
@@ -116,6 +124,14 @@ public class CoursesController : ControllerBase
         return Ok(result);
     }
 
+    /// <summary>
+    /// Hämtar en kurs baserat på kurstitel
+    /// </summary> 
+    /// <param name="courseTitle">Kurstitel krävs</param> 
+    /// <returns>
+    /// Kursinformation om sökt kurs och dess lärare samt studenter
+    /// </returns> 
+    /// <response code="200">Retunerar kursinformation om sökt kurs och dess lärare samt studenter</response> 
     [HttpGet("getbycoursetitle/{courseTitle}")]
     public async Task<ActionResult> GetByCourseTitle(string courseTitle)
     {
@@ -147,6 +163,14 @@ public class CoursesController : ControllerBase
         return Ok(result);
     }
 
+    /// <summary>
+    /// Hämtar en eller flera kurser baserat på namn på lärare
+    /// </summary> 
+    /// <param name="teacher">För- och efternamn på lärare krävs</param> 
+    /// <returns>
+    /// Kursinformation om sökt kurs och dess lärare samt studenter
+    /// </returns> 
+    /// <response code="200">Retunerar kursinformation om sökt kurs och dess lärare samt studenter</response> 
     [HttpGet("getbyteacher/{teacher}")]
     public async Task<ActionResult> GetByTeacher(string teacher)
     {
@@ -177,6 +201,14 @@ public class CoursesController : ControllerBase
         return Ok(result);
     }
 
+    /// <summary>
+    /// Hämtar en eller flera kurser baserat på startdatum
+    /// </summary> 
+    /// <param name="year/month/day">Startdatum krävs</param> 
+    /// <returns>
+    /// Kursinformation om sökt kurs och dess lärare samt studenter
+    /// </returns> 
+    /// <response code="200">Retunerar kursinformation om sökt kurs och dess lärare samt studenter</response> 
     [HttpGet("getbycoursestart/{year}/{month}/{day}")]
     public async Task<ActionResult> GetByCourseStart(int year, int month, int day)
     {
@@ -210,6 +242,16 @@ public class CoursesController : ControllerBase
         return Ok(result);
     }
 
+    /// <summary>
+    /// Lägger till en ny kurs
+    /// </summary>
+    /// <param name="model">Objektet 'CourseAddViewModel' innehåller detaljer om den nya kursen</param>
+    /// <remarks>
+    /// Tillåter admin att lägga till en ny kurs i systemet genom att skicka en POST-request med kursdetaljer i request body
+    /// </remarks>
+    /// <returns>
+    /// Retunerar en statuskod som indikerar om det gick att lägga till kursen i systemet eller inte
+    /// </returns>
     [HttpPost()]
     public async Task<ActionResult> AddCourse(CourseAddViewModel model)
     {
@@ -264,6 +306,17 @@ public class CoursesController : ControllerBase
         return StatusCode(500, "Internal Server Error");
     }
 
+    /// <summary>
+    /// Uppdaterar en kurs baserat på kurs-ID
+    /// </summary>
+    /// <param name="id">Kurs-ID krävs</param>
+    /// <param name="model">Objektet 'CourseUpdateViewModel' innehåller uppdaterade detaljer för kursen</param>
+    /// <remarks>
+    /// Tillåter admin att uppdatera en kurs i systemet genom att skicka en PUT-request med kursId och uppdaterade detaljer om kursen i request-body
+    /// </remarks>
+    /// <returns>
+    /// Retunerar en statuskod som indikerar om det gick att uppdatera kursen i systemet eller inte
+    /// </returns>
     [HttpPut("{id}")]
     public async Task<ActionResult> UpdateCourse(int id, CourseUpdateViewModel model)
     {
@@ -305,6 +358,17 @@ public class CoursesController : ControllerBase
         return StatusCode(500, "Internal Server Error");
     }
 
+    /// <summary>
+    /// Lägger till en student till en befintlig kurs
+    /// </summary>
+    /// <param name="courseId">Kurs-ID krävs</param>
+    /// <param name="model">Objektet 'CourseAddStudentViewModel' innehåller uppdaterade detaljer för kursen</param>
+    /// <remarks>
+    /// Tillåter admin att uppdatera en kurs med tillhörande studenter i systemet genom att skicka en PATCH-request med kursId och uppdaterade detaljer om kursen i request-body
+    /// </remarks>
+    /// <returns>
+    /// Retunerar en statuskod som indikerar om det gick att uppdatera kursen med tillhörande studenter i systemet eller inte
+    /// </returns>
     [HttpPatch("addstudent/{courseId}")]
     public async Task<ActionResult> AddStudent(int courseId, CourseAddStudentViewModel model)
     {
@@ -334,6 +398,16 @@ public class CoursesController : ControllerBase
         return StatusCode(500, "Internal Server Error");
     }
 
+    /// <summary>
+    /// Sätter status på en kurs till "full"
+    /// </summary>
+    /// <param name="id">Kurs-ID krävs</param>
+    /// <remarks>
+    /// Tillåter admin att sätta statusen på en kurs till "full" genom att skicka en PATCH-request med kursId
+    /// </remarks>
+    /// <returns>
+    /// Retunerar en statuskod som indikerar om det gick att sätta kursen till "full" i systemet eller inte
+    /// </returns>
     [HttpPatch("setstatus/asfull/{id}")]
     public async Task<ActionResult> SetStatusAsFull(int id)
     {
@@ -357,6 +431,16 @@ public class CoursesController : ControllerBase
         return StatusCode(500, "Internal Server Error");
     }
 
+    /// <summary>
+    /// Sätter status på en kurs till "done"
+    /// </summary>
+    /// <param name="id">Kurs-ID</param>
+    /// <remarks>
+    /// Tillåter admin att sätta statusen på en kurs till "done" genom att skicka en PATCH-request med kursId
+    /// </remarks>
+    /// <returns>
+    /// Retunerar en statuskod som indikerar om det gick att sätta kursen till "done" i systemet eller inte
+    /// </returns>
     [HttpPatch("setstatus/asdone/{id}")]
     public async Task<ActionResult> SetStatusAsDone(int id)
     {
@@ -380,6 +464,17 @@ public class CoursesController : ControllerBase
         return StatusCode(500, "Internal Server Error");
     }
 
+    /// <summary>
+    /// Sätter en lärare till en kurs
+    /// </summary>
+    /// <param name="id">Kurs-ID krävs</param>
+    /// <param name="model">Objektet 'CourseSetTeacherViewModel' innehåller uppdaterade detaljer för kursen</param>
+    /// <remarks>
+    /// Tillåter admin att sätta en befintlig lärare till en kurs genom att skicka en PATCH-request med kursId
+    /// </remarks>
+    /// <returns>
+    /// Retunerar en statuskod som indikerar om det gick att sätta en befintlig lärare till en kurs i systemet eller inte
+    /// </returns>
     [HttpPatch("setteacher/{id}")]
     public async Task<ActionResult> SetTeacher(int id, CourseSetTeacherViewModel model)
     {
@@ -403,6 +498,16 @@ public class CoursesController : ControllerBase
         return StatusCode(500, "Internal Server Error");
     }
 
+    /// <summary>
+    /// Raderar en kurs baserat på kurs-ID
+    /// </summary>
+    /// <param name="id">Kurs-ID krävs</param>
+    /// <remarks>
+    /// Tillåter admin att radera en kurs i systemet genom att skicka en DELETE request med kurs-ID
+    /// </remarks>
+    /// <returns>
+    /// Retunerar en statuskod som indikerar på om kursen gick att radera i systemet eller inte
+    /// </returns>
     [HttpDelete("{id}")]
     public async Task<ActionResult> DeleteCourse(int id)
     {
