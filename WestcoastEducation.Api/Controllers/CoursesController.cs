@@ -10,6 +10,7 @@ namespace WestcoastEducation.Api.Controllers;
 
 [ApiController]
 [Route("api/v1/courses")]
+[Produces("application/json")]
 public class CoursesController : ControllerBase
 {
     private readonly WestcoastEducationContext _context;
@@ -243,16 +244,20 @@ public class CoursesController : ControllerBase
     }
 
     /// <summary>
-    /// Lägger till en ny kurs
+    /// Skapar och lägger till en ny kurs
     /// </summary>
     /// <param name="model">Objektet 'CourseAddViewModel' innehåller detaljer om den nya kursen</param>
     /// <remarks>
     /// Tillåter admin att lägga till en ny kurs i systemet genom att skicka en POST-request med kursdetaljer i request body
     /// </remarks>
     /// <returns>
-    /// Retunerar en statuskod som indikerar om det gick att lägga till kursen i systemet eller inte
+    /// Retunerar en länk till den nya kursen och ett objekt med kursens information
     /// </returns>
+    /// <response code="201">Retunerar den tillagda kursen</response>
+    /// <response code="400">Om kursen redan existerar eller om det saknas information i anropet</response> 
     [HttpPost()]
+    [ProducesResponseType(StatusCodes.Status201Created)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public async Task<ActionResult> AddCourse(CourseAddViewModel model)
     {
         // kontrollerar att jag har fått in allting korrekt... 
@@ -317,7 +322,11 @@ public class CoursesController : ControllerBase
     /// <returns>
     /// Retunerar en statuskod som indikerar om det gick att uppdatera kursen i systemet eller inte
     /// </returns>
+    /// <response code="204">Inget resultat retuneras</response>
+    /// <response code="404">Om kurs eller lärare inte finns i systemet</response>
     [HttpPut("{id}")]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<ActionResult> UpdateCourse(int id, CourseUpdateViewModel model)
     {
         if (!ModelState.IsValid) return BadRequest("Information saknas för att kunna uppdatera kursen");
@@ -359,7 +368,7 @@ public class CoursesController : ControllerBase
     }
 
     /// <summary>
-    /// Lägger till en student till en befintlig kurs
+    /// Lägger till en befintlig student till en befintlig kurs
     /// </summary>
     /// <param name="courseId">Kurs-ID krävs</param>
     /// <param name="model">Objektet 'CourseAddStudentViewModel' innehåller uppdaterade detaljer för kursen</param>
@@ -369,7 +378,11 @@ public class CoursesController : ControllerBase
     /// <returns>
     /// Retunerar en statuskod som indikerar om det gick att uppdatera kursen med tillhörande studenter i systemet eller inte
     /// </returns>
+    /// <response code="204">Inget resultat retuneras</response>
+    /// <response code="404">Om kurs eller student inte finns i systemet</response>
     [HttpPatch("addstudent/{courseId}")]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<ActionResult> AddStudent(int courseId, CourseAddStudentViewModel model)
     {
         var course = await _context.Courses
@@ -408,6 +421,8 @@ public class CoursesController : ControllerBase
     /// <returns>
     /// Retunerar en statuskod som indikerar om det gick att sätta kursen till "full" i systemet eller inte
     /// </returns>
+    /// <response code="204">Inget resultat retuneras</response>
+    /// <response code="404">Om kurs inte finns i systemet</response>
     [HttpPatch("setstatus/asfull/{id}")]
     public async Task<ActionResult> SetStatusAsFull(int id)
     {
@@ -441,6 +456,8 @@ public class CoursesController : ControllerBase
     /// <returns>
     /// Retunerar en statuskod som indikerar om det gick att sätta kursen till "done" i systemet eller inte
     /// </returns>
+    /// <response code="204">Inget resultat retuneras</response>
+    /// <response code="404">Om kurs inte finns i systemet</response>
     [HttpPatch("setstatus/asdone/{id}")]
     public async Task<ActionResult> SetStatusAsDone(int id)
     {
@@ -475,6 +492,8 @@ public class CoursesController : ControllerBase
     /// <returns>
     /// Retunerar en statuskod som indikerar om det gick att sätta en befintlig lärare till en kurs i systemet eller inte
     /// </returns>
+    /// <response code="204">Inget resultat retuneras</response>
+    /// <response code="404">Om kurs inte finns i systemet</response>
     [HttpPatch("setteacher/{id}")]
     public async Task<ActionResult> SetTeacher(int id, CourseSetTeacherViewModel model)
     {
@@ -508,6 +527,7 @@ public class CoursesController : ControllerBase
     /// <returns>
     /// Retunerar en statuskod som indikerar på om kursen gick att radera i systemet eller inte
     /// </returns>
+    /// <response code="200">Inget resultat retuneras</response>
     [HttpDelete("{id}")]
     public async Task<ActionResult> DeleteCourse(int id)
     {
