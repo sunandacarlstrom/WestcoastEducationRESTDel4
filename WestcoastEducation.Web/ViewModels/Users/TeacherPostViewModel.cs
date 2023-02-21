@@ -15,12 +15,12 @@ public class TeacherPostViewModel
 
     public List<SelectListItem> Skills { get; set; }
 
-    [DisplayName("Kurser (Välj flera med CTRL/CMD+vänsterklick)")]
+    [DisplayName("Skills (Välj flera med CTRL/CMD+vänsterklick)")]
 
     public List<int> SkillsList { get; set; }
 
     public List<SelectListItem> Courses { get; set; }
-    
+
     [DisplayName("Kurser (Välj flera med CTRL/CMD+vänsterklick)")]
     public List<int> CoursesList { get; set; }
 }
