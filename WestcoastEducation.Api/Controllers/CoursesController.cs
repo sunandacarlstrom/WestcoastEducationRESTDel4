@@ -527,7 +527,8 @@ public class CoursesController : ControllerBase
     /// <returns>
     /// Retunerar en statuskod som indikerar på om kursen gick att radera i systemet eller inte
     /// </returns>
-    /// <response code="200">Inget resultat retuneras</response>
+    /// <response code="204">Inget resultat retuneras</response>
+    /// <response code="404">Om kurs inte finns i systemet</response>
     [HttpDelete("{id}")]
     public async Task<ActionResult> DeleteCourse(int id)
     {
