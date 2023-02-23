@@ -1,0 +1,32 @@
+@model WestcoastEducation.Web.ViewModels.Account.Admin.RoleViewModel
+
+@{
+    ViewBag.PageTitle = "Lägg till roll";
+}
+
+<article class="page-centered">
+    <form asp-action="CreateRole" asp-route-returnurl="@ViewBag.returnUrl">
+        <div class="card">
+            <h1 class="card-header">Skapa en ny roll</h1>
+            <div class="card-body">
+                <div class="form-control">
+                    <label asp-for="RoleName"></label>
+                    <input asp-for="RoleName" />
+                    <span class="error" asp-validation-for="RoleName"></span>
+                </div>
+            </div>
+            <div class="card-footer">
+                <button type="Submit" class="btn-submit">
+                    <i class="fa-sharp fa-solid fa-floppy-disk"></i>
+                    Spara
+                </button>
+                <a asp-action="Index" asp-controller="ClassroomAdmin" class="btn-cancel">
+                    <i class="fa-solid fa-arrow-left"></i>
+                    Avbryt
+                </a>
+            </div>
+            <div class="error-message error" asp-validation-summary="All"></div>
+        </div>
+    </form>
+
+</article>

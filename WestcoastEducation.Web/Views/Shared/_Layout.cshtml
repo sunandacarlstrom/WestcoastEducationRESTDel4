@@ -27,7 +27,17 @@
             <ul>
                 <li><a asp-action="Index" asp-controller="Home">Start</a></li>
                 <li><a asp-action="Index" asp-controller="Classroom">Utbildningar</a></li>
-                <li><a asp-action="Index" asp-controller="Admin"><i class="fa-solid fa-gears"></i></a></li>
+                @* Gör kontroll med razor-syntax...*@
+                @* om användaren är inloggad, då körs else-blocket. *@
+                @if (User.Identity is null || User.Identity.IsAuthenticated == false)
+                {
+                    <li><a asp-action="login" asp-controller="Account" class="btn-outline">Logga In</a></li>
+                }
+                else
+                {
+                    <li><a asp-action="logout" asp-controller="Account" class="btn-outline">Logga Ut</a></li>
+                }
+                @* <li><a asp-action="Index" asp-controller="Admin"><i class="fa-solid fa-gears"></i></a></li> *@
             </ul>
         </nav>
     </header>

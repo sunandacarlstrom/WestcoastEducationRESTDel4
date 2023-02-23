@@ -1,0 +1,42 @@
+@model WestcoastEducation.Web.ViewModels.Account.LoginViewModel
+
+@{
+    ViewBag.PageTitle = "Logga In";
+}
+
+<article class="page-centered">
+    <form asp-action="login" asp-route-returnurl="@ViewBag.returnUrl">
+        <div class="card">
+            <h1 class="card-header">Logga In</h1>
+            <div class="card-body">
+                <div class="form-control">
+                    <label asp-for="UserName"></label>
+                    <input asp-for="UserName" />
+                    <span class="error" asp-validation-for="UserName"></span>
+                </div>
+                <div class="form-control">
+                    <label asp-for="Password"></label>
+                    <input asp-for="Password" />
+                    <span class="error" asp-validation-for="Password"></span>
+                </div>
+                <br>
+                <div class="highligted-link">
+                    <span>Inget konto?</span>
+                    <a asp-action="register">Klicka här</a>
+                    <span> för att skapa ett</span>
+                </div>
+            </div>
+            <div class="card-footer">
+                <button type="Submit" class="btn-submit">
+                    <i class="fa-solid fa-right-to-bracket"></i>
+                    Logga In
+                </button>
+                <a asp-action="Index" asp-controller="Home" class="btn-cancel">
+                    <i class="fa-solid fa-arrow-left"></i>
+                    Avbryt
+                </a>
+            </div>
+        </div>
+    </form>
+
+</article>

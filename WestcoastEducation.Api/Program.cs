@@ -24,6 +24,13 @@ builder.Services.AddDbContext<WestcoastEducationContext>(options =>
 builder.Services.AddIdentityCore<UserModel>(options =>
 {
     options.User.RequireUniqueEmail = true;
+    options.Password.RequireDigit = false;
+    options.Password.RequireNonAlphanumeric = false;
+    options.Password.RequiredLength = 6;
+    // options.Password.RequireLowercase = true; 
+    // options.Password.RequireUppercase = true;
+
+    options.Lockout.MaxFailedAccessAttempts = 5;
 })
     .AddRoles<IdentityRole>()
     .AddEntityFrameworkStores<WestcoastEducationContext>();
@@ -108,6 +115,8 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+
+app.UseAuthentication();
 
 app.UseAuthorization();
 
