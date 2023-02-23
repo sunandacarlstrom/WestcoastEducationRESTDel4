@@ -1,8 +1,9 @@
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 
-namespace WestcoastEducation.Api.ViewModels.Account;
-public class LoginViewModel
+namespace WestcoastEducation.Web.ViewModels.Account;
+
+public class LoginPostViewModel
 {
     [Required(ErrorMessage = "Användarnamn saknas")]
     [DisplayName("Användarnamn/E-Post")]

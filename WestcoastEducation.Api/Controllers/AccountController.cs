@@ -12,29 +12,15 @@ public class AccountController : ControllerBase
 {
     private readonly UserManager<UserModel> _userManager;
     private readonly TokenService _tokenService;
-    public AccountController(UserManager<UserModel> userManager, TokenService tokenService)
+    private readonly SignInManager<IdentityUser> _signInManager;
+    private readonly RoleManager<IdentityRole> _roleManager;
+    public AccountController(UserManager<UserModel> userManager, TokenService tokenService,
+        SignInManager<IdentityUser> signInManager, RoleManager<IdentityRole> roleManager)
     {
+        _roleManager = roleManager;
+        _signInManager = signInManager;
         _tokenService = tokenService;
         _userManager = userManager;
-    }
-
-    [HttpPost("login")]
-    public async Task<ActionResult> Login(LoginViewModel model)
-    {
-        // hitta en användare i systemet 
-        var user = await _userManager.FindByNameAsync(model.UserName);
-        // om användaren inte existserar eller inte anger rätt lösenord då retuneras ett felmeddelande med ".Unauthorized" 
-        if (user is null || !await _userManager.CheckPasswordAsync(user, model.Password))
-        {
-            return Unauthorized();
-        }
-
-        //retunerar en vymodell för användaren som även skapar ett nytt Token 
-        return Ok(new UserViewModel
-        {
-            Email = user.Email,
-            Token = await _tokenService.CreateToken(user)
-        });
     }
 
     [HttpPost("register")]
@@ -70,5 +56,24 @@ public class AccountController : ControllerBase
         await _userManager.AddToRoleAsync(user, "User");
         // vill inte automatiskt logga in användaren, endast retunera ett OK! 
         return StatusCode(201);
+    }
+
+    [HttpPost("login")]
+    public async Task<ActionResult> Login(LoginViewModel model)
+    {
+        // hitta en användare i systemet 
+        var user = await _userManager.FindByNameAsync(model.UserName);
+        // om användaren inte existerar eller inte anger rätt lösenord då retuneras ett felmeddelande med ".Unauthorized" 
+        if (user is null || !await _userManager.CheckPasswordAsync(user, model.Password))
+        {
+            return Unauthorized();
+        }
+        
+        //retunerar en vymodell för användaren som även skapar ett nytt Token 
+        return Ok(new UserViewModel
+        {
+            Email = user.Email,
+            Token = await _tokenService.CreateToken(user)
+        });
     }
 }

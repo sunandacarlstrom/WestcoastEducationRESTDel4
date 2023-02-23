@@ -24,7 +24,7 @@ public class CoursesController : ControllerBase
     /// </summary> 
     [HttpGet("listall")]
     //endast tillgänglig för användare med rollen Teacher
-    // [Authorize(Roles = "Teacher, Admin")]
+    [Authorize(Roles = "Teacher, Admin")]
     public async Task<ActionResult> ListAll()
     {
         var result = await _context.Courses
