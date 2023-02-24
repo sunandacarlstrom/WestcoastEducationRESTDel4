@@ -14,11 +14,8 @@ public class AccountController : ControllerBase
     private readonly TokenService _tokenService;
     private readonly SignInManager<IdentityUser> _signInManager;
     private readonly RoleManager<IdentityRole> _roleManager;
-    public AccountController(UserManager<UserModel> userManager, TokenService tokenService,
-        SignInManager<IdentityUser> signInManager, RoleManager<IdentityRole> roleManager)
+    public AccountController(UserManager<UserModel> userManager, TokenService tokenService)
     {
-        _roleManager = roleManager;
-        _signInManager = signInManager;
         _tokenService = tokenService;
         _userManager = userManager;
     }
@@ -68,7 +65,7 @@ public class AccountController : ControllerBase
         {
             return Unauthorized();
         }
-        
+
         //retunerar en vymodell för användaren som även skapar ett nytt Token 
         return Ok(new UserViewModel
         {

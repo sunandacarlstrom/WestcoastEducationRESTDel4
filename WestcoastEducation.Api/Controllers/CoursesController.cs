@@ -23,7 +23,6 @@ public class CoursesController : ControllerBase
     /// Listar alla kurser i systemet
     /// </summary> 
     [HttpGet("listall")]
-    //endast tillgänglig för användare med rollen Teacher
     [Authorize(Roles = "Teacher, Admin")]
     public async Task<ActionResult> ListAll()
     {
