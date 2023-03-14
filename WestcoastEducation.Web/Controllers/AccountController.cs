@@ -55,6 +55,6 @@ public class AccountController : Controller
         // set token as cookie in response
         Response.Cookies.Append("AuthToken", token);
 
-        return Ok();
+        return RedirectToAction("Index", "admin"); 
     }
 }

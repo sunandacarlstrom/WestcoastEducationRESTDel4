@@ -25,6 +25,7 @@ public class ClassroomAdminController : Controller
 
     public async Task<IActionResult> Index()
     {
+        
         // skapa en instans av http klienten 
         using var client = _httpClient.CreateClient();
 

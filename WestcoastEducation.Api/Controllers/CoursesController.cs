@@ -23,7 +23,7 @@ public class CoursesController : ControllerBase
     /// Listar alla kurser i systemet
     /// </summary> 
     [HttpGet("listall")]
-    [Authorize(Roles = "Teacher, Admin")]
+    //[Authorize(Roles = "Teacher, Admin")]
     public async Task<ActionResult> ListAll()
     {
         var result = await _context.Courses
